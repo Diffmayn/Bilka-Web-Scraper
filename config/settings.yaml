@@ -1,0 +1,38 @@
+scraping:
+  user_agents:
+    - "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+    - "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+    - "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+  request_delay_min: 2
+  request_delay_max: 5
+  max_retries: 3
+  timeout: 30
+  headless: false
+
+database:
+  provider: sqlite
+  filename: ./data/bilka_prices.db
+  backup_interval_hours: 24
+
+analysis:
+  high_discount_threshold: 75
+  critical_discount_threshold: 90
+  price_error_margin: 0.05  # 5% tolerance
+
+ui:
+  refresh_interval_seconds: 300
+  default_category: "electronics"
+  max_display_products: 100
+
+logging:
+  level: INFO
+  file: ./logs/scraper.log
+  rotation: daily
+
+bilka:
+  base_url: "https://bilka.dk"
+  categories:
+    electronics: "/elektronik"
+    home: "/hjem-og-interior"
+    fashion: "/mode"
+    sports: "/sport-og-fritid"

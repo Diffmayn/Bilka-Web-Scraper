@@ -1,0 +1,15 @@
+# Bilka Price Monitor - POC Requirements
+# Minimal dependencies for the simple web-based POC
+
+# Core web framework
+streamlit>=1.28.0
+
+# Data processing
+pandas>=2.1.0
+
+# Web scraping (lightweight)
+requests>=2.31.0
+beautifulsoup4>=4.12.0
+
+# Optional: For better performance
+lxml>=4.9.0

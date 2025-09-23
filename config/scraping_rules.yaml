@@ -1,0 +1,47 @@
+selectors:
+  product_container: ".product-card"
+  product_name: ".v-card__title"
+  price_regular: ".after-price"
+  price_sale: ".price-sale"
+  discount_badge: ".discount-percentage"
+  product_image: ".product-image img"
+  product_url: ".product-card"
+  availability: ".stock-status"
+  category_breadcrumb: ".breadcrumb"
+  brand: ".product-brand"
+
+patterns:
+  price_regex: "(\\d+[,.]\\d{2})"
+  discount_regex: "(-?\\d+)%"
+  currency: "kr\\.|DKK"
+
+categories:
+  electronics:
+    url_pattern: "/elektronik"
+    subcategories:
+      - "mobiltelefoner"
+      - "computere"
+      - "tv-og-lyd"
+  home:
+    url_pattern: "/hjem-og-interior"
+    subcategories:
+      - "køkken"
+      - "bad"
+      - "møbler"
+  fashion:
+    url_pattern: "/mode"
+    subcategories:
+      - "dame"
+      - "herre"
+      - "børn"
+  sports:
+    url_pattern: "/sport-og-fritid"
+    subcategories:
+      - "fitness"
+      - "outdoor"
+      - "cykler"
+
+validation:
+  max_price: 100000  # Maximum expected price in DKK
+  min_price: 0.01    # Minimum expected price in DKK
+  max_discount: 95   # Maximum expected discount percentage

@@ -1,0 +1,2249 @@
+{
+  "summary": {
+    "total_products": 500,
+    "products_with_discount": 500,
+    "average_discount": 43.82,
+    "max_discount": 79.96
+  },
+  "errors": [
+    {
+      "product_id": "P0000",
+      "name": "Sample Product 0",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (1056.2977196090253) > Regular price (780.3532317523568)",
+      "regular_price": 780.3532317523568,
+      "sale_price": 1056.2977196090253,
+      "discount_percentage": 18.884969662896474
+    },
+    {
+      "product_id": "P0003",
+      "name": "Sample Product 3",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (1226.2786789692145) > Regular price (1217.3840441842215)",
+      "regular_price": 1217.3840441842215,
+      "sale_price": 1226.2786789692145,
+      "discount_percentage": 59.91686648071709
+    },
+    {
+      "product_id": "P0004",
+      "name": "Sample Product 4",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (1036.5548236542027) > Regular price (354.2363488627512)",
+      "regular_price": 354.2363488627512,
+      "sale_price": 1036.5548236542027,
+      "discount_percentage": 65.49208608960873
+    },
+    {
+      "product_id": "P0006",
+      "name": "Sample Product 6",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (1369.0629612059483) > Regular price (163.26304372798893)",
+      "regular_price": 163.26304372798893,
+      "sale_price": 1369.0629612059483,
+      "discount_percentage": 56.920742338838934
+    },
+    {
+      "product_id": "P0008",
+      "name": "Sample Product 8",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (1426.2058725391282) > Regular price (1222.1742728992572)",
+      "regular_price": 1222.1742728992572,
+      "sale_price": 1426.2058725391282,
+      "discount_percentage": 23.725100664438944
+    },
+    {
+      "product_id": "P0010",
+      "name": "Sample Product 10",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (931.7203380256111) > Regular price (90.13976387681477)",
+      "regular_price": 90.13976387681477,
+      "sale_price": 931.7203380256111,
+      "discount_percentage": 21.590708136470166
+    },
+    {
+      "product_id": "P0013",
+      "name": "Sample Product 13",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (1303.1139175656003) > Regular price (464.0612658226385)",
+      "regular_price": 464.0612658226385,
+      "sale_price": 1303.1139175656003,
+      "discount_percentage": 7.957010852637943
+    },
+    {
+      "product_id": "P0017",
+      "name": "Sample Product 17",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (1221.5133962492944) > Regular price (1073.275041682864)",
+      "regular_price": 1073.275041682864,
+      "sale_price": 1221.5133962492944,
+      "discount_percentage": 47.59589229144721
+    },
+    {
+      "product_id": "P0018",
+      "name": "Sample Product 18",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (1481.2959100929684) > Regular price (892.2927863521257)",
+      "regular_price": 892.2927863521257,
+      "sale_price": 1481.2959100929684,
+      "discount_percentage": 73.66162231910315
+    },
+    {
+      "product_id": "P0021",
+      "name": "Sample Product 21",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (589.9095592476016) > Regular price (322.0130282714816)",
+      "regular_price": 322.0130282714816,
+      "sale_price": 589.9095592476016,
+      "discount_percentage": 27.301175552941306
+    },
+    {
+      "product_id": "P0022",
+      "name": "Sample Product 22",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (1455.7741647874668) > Regular price (619.6820646436754)",
+      "regular_price": 619.6820646436754,
+      "sale_price": 1455.7741647874668,
+      "discount_percentage": 74.32971465323978
+    },
+    {
+      "product_id": "P0023",
+      "name": "Sample Product 23",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (1267.9148170094918) > Regular price (764.4055944226989)",
+      "regular_price": 764.4055944226989,
+      "sale_price": 1267.9148170094918,
+      "discount_percentage": 77.82936838740258
+    },
+    {
+      "product_id": "P0024",
+      "name": "Sample Product 24",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (1262.3431959253726) > Regular price (939.3364692232201)",
+      "regular_price": 939.3364692232201,
+      "sale_price": 1262.3431959253726,
+      "discount_percentage": 75.81998668350754
+    },
+    {
+      "product_id": "P0026",
+      "name": "Sample Product 26",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (639.7846684363678) > Regular price (439.36387520880146)",
+      "regular_price": 439.36387520880146,
+      "sale_price": 639.7846684363678,
+      "discount_percentage": 69.65319882419851
+    },
+    {
+      "product_id": "P0029",
+      "name": "Sample Product 29",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (1301.1418930949283) > Regular price (140.57830480399556)",
+      "regular_price": 140.57830480399556,
+      "sale_price": 1301.1418930949283,
+      "discount_percentage": 67.16866056130081
+    },
+    {
+      "product_id": "P0031",
+      "name": "Sample Product 31",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (1499.584979730612) > Regular price (382.5220411902185)",
+      "regular_price": 382.5220411902185,
+      "sale_price": 1499.584979730612,
+      "discount_percentage": 49.72024088615398
+    },
+    {
+      "product_id": "P0032",
+      "name": "Sample Product 32",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (1495.0561504986408) > Regular price (176.85060632129506)",
+      "regular_price": 176.85060632129506,
+      "sale_price": 1495.0561504986408,
+      "discount_percentage": 22.25066279657773
+    },
+    {
+      "product_id": "P0036",
+      "name": "Sample Product 36",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (1278.9816642957949) > Regular price (643.9968498880728)",
+      "regular_price": 643.9968498880728,
+      "sale_price": 1278.9816642957949,
+      "discount_percentage": 30.49062228260496
+    },
+    {
+      "product_id": "P0037",
+      "name": "Sample Product 37",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (393.60170956250056) > Regular price (240.46062231244855)",
+      "regular_price": 240.46062231244855,
+      "sale_price": 393.60170956250056,
+      "discount_percentage": 59.35750786465711
+    },
+    {
+      "product_id": "P0040",
+      "name": "Sample Product 40",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (1432.4550100703218) > Regular price (287.9745579473187)",
+      "regular_price": 287.9745579473187,
+      "sale_price": 1432.4550100703218,
+      "discount_percentage": 45.461846928150294
+    },
+    {
+      "product_id": "P0042",
+      "name": "Sample Product 42",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (366.1049240900902) > Regular price (117.05761617467587)",
+      "regular_price": 117.05761617467587,
+      "sale_price": 366.1049240900902,
+      "discount_percentage": 28.906437719905245
+    },
+    {
+      "product_id": "P0044",
+      "name": "Sample Product 44",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (938.6485134731068) > Regular price (554.620964120033)",
+      "regular_price": 554.620964120033,
+      "sale_price": 938.6485134731068,
+      "discount_percentage": 71.44833111771403
+    },
+    {
+      "product_id": "P0049",
+      "name": "Sample Product 49",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (1165.3080358513898) > Regular price (410.4661882747777)",
+      "regular_price": 410.4661882747777,
+      "sale_price": 1165.3080358513898,
+      "discount_percentage": 6.595205813779035
+    },
+    {
+      "product_id": "P0054",
+      "name": "Sample Product 54",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (1318.680795907767) > Regular price (1215.904958681616)",
+      "regular_price": 1215.904958681616,
+      "sale_price": 1318.680795907767,
+      "discount_percentage": 79.84505829000031
+    },
+    {
+      "product_id": "P0056",
+      "name": "Sample Product 56",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (227.00238582244188) > Regular price (222.560379001243)",
+      "regular_price": 222.560379001243,
+      "sale_price": 227.00238582244188,
+      "discount_percentage": 62.539121669834515
+    },
+    {
+      "product_id": "P0058",
+      "name": "Sample Product 58",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (1140.05176584022) > Regular price (138.19321337554925)",
+      "regular_price": 138.19321337554925,
+      "sale_price": 1140.05176584022,
+      "discount_percentage": 40.990671522793164
+    },
+    {
+      "product_id": "P0059",
+      "name": "Sample Product 59",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (941.8550404895931) > Regular price (684.3941449883655)",
+      "regular_price": 684.3941449883655,
+      "sale_price": 941.8550404895931,
+      "discount_percentage": 52.06290974137776
+    },
+    {
+      "product_id": "P0060",
+      "name": "Sample Product 60",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (1064.9972591058586) > Regular price (807.92071489449)",
+      "regular_price": 807.92071489449,
+      "sale_price": 1064.9972591058586,
+      "discount_percentage": 70.52578356397541
+    },
+    {
+      "product_id": "P0066",
+      "name": "Sample Product 66",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (606.5987462966065) > Regular price (324.80223870078714)",
+      "regular_price": 324.80223870078714,
+      "sale_price": 606.5987462966065,
+      "discount_percentage": 22.908285932622675
+    },
+    {
+      "product_id": "P0068",
+      "name": "Sample Product 68",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (1359.1132809058101) > Regular price (195.3737551755531)",
+      "regular_price": 195.3737551755531,
+      "sale_price": 1359.1132809058101,
+      "discount_percentage": 31.59666182305824
+    },
+    {
+      "product_id": "P0071",
+      "name": "Sample Product 71",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (1181.9699287294802) > Regular price (437.4955789916362)",
+      "regular_price": 437.4955789916362,
+      "sale_price": 1181.9699287294802,
+      "discount_percentage": 22.520581328743244
+    },
+    {
+      "product_id": "P0072",
+      "name": "Sample Product 72",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (612.9178900122671) > Regular price (60.768128391024675)",
+      "regular_price": 60.768128391024675,
+      "sale_price": 612.9178900122671,
+      "discount_percentage": 8.156989222727141
+    },
+    {
+      "product_id": "P0077",
+      "name": "Sample Product 77",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (1392.0838089873969) > Regular price (194.3870708814762)",
+      "regular_price": 194.3870708814762,
+      "sale_price": 1392.0838089873969,
+      "discount_percentage": 55.97354620198024
+    },
+    {
+      "product_id": "P0078",
+      "name": "Sample Product 78",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (753.4109508269212) > Regular price (749.0081706613316)",
+      "regular_price": 749.0081706613316,
+      "sale_price": 753.4109508269212,
+      "discount_percentage": 21.369041589879814
+    },
+    {
+      "product_id": "P0079",
+      "name": "Sample Product 79",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (409.6192507994688) > Regular price (275.94466607400295)",
+      "regular_price": 275.94466607400295,
+      "sale_price": 409.6192507994688,
+      "discount_percentage": 76.2470887962669
+    },
+    {
+      "product_id": "P0081",
+      "name": "Sample Product 81",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (1470.6478856696513) > Regular price (1265.431347313738)",
+      "regular_price": 1265.431347313738,
+      "sale_price": 1470.6478856696513,
+      "discount_percentage": 11.705825173419463
+    },
+    {
+      "product_id": "P0082",
+      "name": "Sample Product 82",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (754.1485981695183) > Regular price (695.2511484626659)",
+      "regular_price": 695.2511484626659,
+      "sale_price": 754.1485981695183,
+      "discount_percentage": 36.31855818386963
+    },
+    {
+      "product_id": "P0083",
+      "name": "Sample Product 83",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (513.264867122637) > Regular price (173.9387830577461)",
+      "regular_price": 173.9387830577461,
+      "sale_price": 513.264867122637,
+      "discount_percentage": 70.93387306716235
+    },
+    {
+      "product_id": "P0084",
+      "name": "Sample Product 84",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (961.0992558455869) > Regular price (656.4155273455412)",
+      "regular_price": 656.4155273455412,
+      "sale_price": 961.0992558455869,
+      "discount_percentage": 75.85490167185577
+    },
+    {
+      "product_id": "P0098",
+      "name": "Sample Product 98",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (312.664857648746) > Regular price (99.56729715098561)",
+      "regular_price": 99.56729715098561,
+      "sale_price": 312.664857648746,
+      "discount_percentage": 63.4688355175065
+    },
+    {
+      "product_id": "P0100",
+      "name": "Sample Product 100",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (278.3345427160819) > Regular price (111.28691208913179)",
+      "regular_price": 111.28691208913179,
+      "sale_price": 278.3345427160819,
+      "discount_percentage": 9.338200742254728
+    },
+    {
+      "product_id": "P0105",
+      "name": "Sample Product 105",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (707.3447890081069) > Regular price (536.1198468403061)",
+      "regular_price": 536.1198468403061,
+      "sale_price": 707.3447890081069,
+      "discount_percentage": 18.042143691461547
+    },
+    {
+      "product_id": "P0108",
+      "name": "Sample Product 108",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (770.0233881566396) > Regular price (496.1564227086638)",
+      "regular_price": 496.1564227086638,
+      "sale_price": 770.0233881566396,
+      "discount_percentage": 57.20154635403442
+    },
+    {
+      "product_id": "P0109",
+      "name": "Sample Product 109",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (1044.8803980851671) > Regular price (200.11082416614633)",
+      "regular_price": 200.11082416614633,
+      "sale_price": 1044.8803980851671,
+      "discount_percentage": 16.54219297548913
+    },
+    {
+      "product_id": "P0111",
+      "name": "Sample Product 111",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (1205.1332863962928) > Regular price (364.3815101453086)",
+      "regular_price": 364.3815101453086,
+      "sale_price": 1205.1332863962928,
+      "discount_percentage": 21.83304288774955
+    },
+    {
+      "product_id": "P0114",
+      "name": "Sample Product 114",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (1314.1605774369625) > Regular price (1285.1373251953257)",
+      "regular_price": 1285.1373251953257,
+      "sale_price": 1314.1605774369625,
+      "discount_percentage": 49.47049511312774
+    },
+    {
+      "product_id": "P0117",
+      "name": "Sample Product 117",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (437.0101427763895) > Regular price (413.81161482776986)",
+      "regular_price": 413.81161482776986,
+      "sale_price": 437.0101427763895,
+      "discount_percentage": 70.80956469727853
+    },
+    {
+      "product_id": "P0119",
+      "name": "Sample Product 119",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (1129.9417448639779) > Regular price (1101.717371735519)",
+      "regular_price": 1101.717371735519,
+      "sale_price": 1129.9417448639779,
+      "discount_percentage": 14.713619096210312
+    },
+    {
+      "product_id": "P0123",
+      "name": "Sample Product 123",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (742.2487882308013) > Regular price (264.6012528289697)",
+      "regular_price": 264.6012528289697,
+      "sale_price": 742.2487882308013,
+      "discount_percentage": 65.71370560436586
+    },
+    {
+      "product_id": "P0124",
+      "name": "Sample Product 124",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (938.834514149535) > Regular price (494.47356695678627)",
+      "regular_price": 494.47356695678627,
+      "sale_price": 938.834514149535,
+      "discount_percentage": 54.14314854792663
+    },
+    {
+      "product_id": "P0128",
+      "name": "Sample Product 128",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (83.92430824917892) > Regular price (63.55665453582187)",
+      "regular_price": 63.55665453582187,
+      "sale_price": 83.92430824917892,
+      "discount_percentage": 32.95163877592355
+    },
+    {
+      "product_id": "P0130",
+      "name": "Sample Product 130",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (1078.623891250292) > Regular price (863.951456140119)",
+      "regular_price": 863.951456140119,
+      "sale_price": 1078.623891250292,
+      "discount_percentage": 59.25650852664387
+    },
+    {
+      "product_id": "P0131",
+      "name": "Sample Product 131",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (1345.954051400183) > Regular price (483.11023041792396)",
+      "regular_price": 483.11023041792396,
+      "sale_price": 1345.954051400183,
+      "discount_percentage": 42.19068013090781
+    },
+    {
+      "product_id": "P0132",
+      "name": "Sample Product 132",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (782.1658399100291) > Regular price (283.7374663006815)",
+      "regular_price": 283.7374663006815,
+      "sale_price": 782.1658399100291,
+      "discount_percentage": 11.078466193073595
+    },
+    {
+      "product_id": "P0133",
+      "name": "Sample Product 133",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (812.206823340014) > Regular price (708.3495842370745)",
+      "regular_price": 708.3495842370745,
+      "sale_price": 812.206823340014,
+      "discount_percentage": 21.51374014623585
+    },
+    {
+      "product_id": "P0135",
+      "name": "Sample Product 135",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (687.6961792304784) > Regular price (680.2457174404727)",
+      "regular_price": 680.2457174404727,
+      "sale_price": 687.6961792304784,
+      "discount_percentage": 10.709814461772513
+    },
+    {
+      "product_id": "P0145",
+      "name": "Sample Product 145",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (1339.0751026876455) > Regular price (121.92954734133895)",
+      "regular_price": 121.92954734133895,
+      "sale_price": 1339.0751026876455,
+      "discount_percentage": 70.89724897663685
+    },
+    {
+      "product_id": "P0148",
+      "name": "Sample Product 148",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (1190.0817207527873) > Regular price (150.38356493747924)",
+      "regular_price": 150.38356493747924,
+      "sale_price": 1190.0817207527873,
+      "discount_percentage": 68.79362968206814
+    },
+    {
+      "product_id": "P0149",
+      "name": "Sample Product 149",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (762.7100324257142) > Regular price (593.3606052613923)",
+      "regular_price": 593.3606052613923,
+      "sale_price": 762.7100324257142,
+      "discount_percentage": 70.04706507198517
+    },
+    {
+      "product_id": "P0151",
+      "name": "Sample Product 151",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (819.5466164732652) > Regular price (517.1456868005962)",
+      "regular_price": 517.1456868005962,
+      "sale_price": 819.5466164732652,
+      "discount_percentage": 67.77599962727541
+    },
+    {
+      "product_id": "P0152",
+      "name": "Sample Product 152",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (892.6564434906924) > Regular price (332.54500057788505)",
+      "regular_price": 332.54500057788505,
+      "sale_price": 892.6564434906924,
+      "discount_percentage": 57.31035962519627
+    },
+    {
+      "product_id": "P0153",
+      "name": "Sample Product 153",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (1125.796027050965) > Regular price (1004.4328825412479)",
+      "regular_price": 1004.4328825412479,
+      "sale_price": 1125.796027050965,
+      "discount_percentage": 56.01055788202253
+    },
+    {
+      "product_id": "P0158",
+      "name": "Sample Product 158",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (979.4983447574538) > Regular price (513.3932107851793)",
+      "regular_price": 513.3932107851793,
+      "sale_price": 979.4983447574538,
+      "discount_percentage": 70.3882645808924
+    },
+    {
+      "product_id": "P0161",
+      "name": "Sample Product 161",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (1480.1774157256802) > Regular price (1282.99636965748)",
+      "regular_price": 1282.99636965748,
+      "sale_price": 1480.1774157256802,
+      "discount_percentage": 14.66524006050839
+    },
+    {
+      "product_id": "P0168",
+      "name": "Sample Product 168",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (304.25352535541947) > Regular price (129.51152603178963)",
+      "regular_price": 129.51152603178963,
+      "sale_price": 304.25352535541947,
+      "discount_percentage": 5.478940378762519
+    },
+    {
+      "product_id": "P0171",
+      "name": "Sample Product 171",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (1348.245174200845) > Regular price (82.3462664093195)",
+      "regular_price": 82.3462664093195,
+      "sale_price": 1348.245174200845,
+      "discount_percentage": 78.58896335205677
+    },
+    {
+      "product_id": "P0173",
+      "name": "Sample Product 173",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (801.0317426682743) > Regular price (491.666761635979)",
+      "regular_price": 491.666761635979,
+      "sale_price": 801.0317426682743,
+      "discount_percentage": 24.485268579811983
+    },
+    {
+      "product_id": "P0175",
+      "name": "Sample Product 175",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (1474.0965668556514) > Regular price (390.0145365597333)",
+      "regular_price": 390.0145365597333,
+      "sale_price": 1474.0965668556514,
+      "discount_percentage": 45.49890347868916
+    },
+    {
+      "product_id": "P0179",
+      "name": "Sample Product 179",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (1302.295475064151) > Regular price (318.16584108468686)",
+      "regular_price": 318.16584108468686,
+      "sale_price": 1302.295475064151,
+      "discount_percentage": 45.59499340070827
+    },
+    {
+      "product_id": "P0180",
+      "name": "Sample Product 180",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (1231.0959442954415) > Regular price (715.0793845480041)",
+      "regular_price": 715.0793845480041,
+      "sale_price": 1231.0959442954415,
+      "discount_percentage": 77.2244002894246
+    },
+    {
+      "product_id": "P0181",
+      "name": "Sample Product 181",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (409.11715575606155) > Regular price (271.2733664191487)",
+      "regular_price": 271.2733664191487,
+      "sale_price": 409.11715575606155,
+      "discount_percentage": 30.640412452901458
+    },
+    {
+      "product_id": "P0184",
+      "name": "Sample Product 184",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (1396.182704017551) > Regular price (552.9861740445534)",
+      "regular_price": 552.9861740445534,
+      "sale_price": 1396.182704017551,
+      "discount_percentage": 12.688229599300945
+    },
+    {
+      "product_id": "P0188",
+      "name": "Sample Product 188",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (1161.1546117921473) > Regular price (1082.8186277942127)",
+      "regular_price": 1082.8186277942127,
+      "sale_price": 1161.1546117921473,
+      "discount_percentage": 27.57226752101122
+    },
+    {
+      "product_id": "P0190",
+      "name": "Sample Product 190",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (505.8084775142382) > Regular price (231.55039722150346)",
+      "regular_price": 231.55039722150346,
+      "sale_price": 505.8084775142382,
+      "discount_percentage": 10.051295110157877
+    },
+    {
+      "product_id": "P0195",
+      "name": "Sample Product 195",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (927.6114623891999) > Regular price (730.9586704946887)",
+      "regular_price": 730.9586704946887,
+      "sale_price": 927.6114623891999,
+      "discount_percentage": 70.36526046142822
+    },
+    {
+      "product_id": "P0202",
+      "name": "Sample Product 202",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (524.8082889450633) > Regular price (365.1759924844969)",
+      "regular_price": 365.1759924844969,
+      "sale_price": 524.8082889450633,
+      "discount_percentage": 6.659266364674794
+    },
+    {
+      "product_id": "P0205",
+      "name": "Sample Product 205",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (1485.2415416132194) > Regular price (67.9342506524278)",
+      "regular_price": 67.9342506524278,
+      "sale_price": 1485.2415416132194,
+      "discount_percentage": 62.78055633558449
+    },
+    {
+      "product_id": "P0206",
+      "name": "Sample Product 206",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (503.86015211284274) > Regular price (247.8695085887626)",
+      "regular_price": 247.8695085887626,
+      "sale_price": 503.86015211284274,
+      "discount_percentage": 56.24715324548789
+    },
+    {
+      "product_id": "P0208",
+      "name": "Sample Product 208",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (404.32176250273284) > Regular price (59.87008850012644)",
+      "regular_price": 59.87008850012644,
+      "sale_price": 404.32176250273284,
+      "discount_percentage": 25.52199997112494
+    },
+    {
+      "product_id": "P0209",
+      "name": "Sample Product 209",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (1031.809001669176) > Regular price (363.57570026412236)",
+      "regular_price": 363.57570026412236,
+      "sale_price": 1031.809001669176,
+      "discount_percentage": 79.78433751182834
+    },
+    {
+      "product_id": "P0210",
+      "name": "Sample Product 210",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (1147.5349540378393) > Regular price (1120.030889264843)",
+      "regular_price": 1120.030889264843,
+      "sale_price": 1147.5349540378393,
+      "discount_percentage": 36.96359766769797
+    },
+    {
+      "product_id": "P0213",
+      "name": "Sample Product 213",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (635.4061437964848) > Regular price (487.32515344809156)",
+      "regular_price": 487.32515344809156,
+      "sale_price": 635.4061437964848,
+      "discount_percentage": 64.6107161562447
+    },
+    {
+      "product_id": "P0215",
+      "name": "Sample Product 215",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (1396.407842044304) > Regular price (512.6357206187602)",
+      "regular_price": 512.6357206187602,
+      "sale_price": 1396.407842044304,
+      "discount_percentage": 21.55772095915703
+    },
+    {
+      "product_id": "P0216",
+      "name": "Sample Product 216",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (1251.0105294479617) > Regular price (684.529411410572)",
+      "regular_price": 684.529411410572,
+      "sale_price": 1251.0105294479617,
+      "discount_percentage": 11.178578421188202
+    },
+    {
+      "product_id": "P0220",
+      "name": "Sample Product 220",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (1409.3604715269257) > Regular price (1332.3451399856697)",
+      "regular_price": 1332.3451399856697,
+      "sale_price": 1409.3604715269257,
+      "discount_percentage": 76.31476716878078
+    },
+    {
+      "product_id": "P0223",
+      "name": "Sample Product 223",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (1119.4473544563868) > Regular price (767.0458159658954)",
+      "regular_price": 767.0458159658954,
+      "sale_price": 1119.4473544563868,
+      "discount_percentage": 75.77119401256992
+    },
+    {
+      "product_id": "P0224",
+      "name": "Sample Product 224",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (874.4754763744705) > Regular price (567.1446169793646)",
+      "regular_price": 567.1446169793646,
+      "sale_price": 874.4754763744705,
+      "discount_percentage": 36.47954876945917
+    },
+    {
+      "product_id": "P0225",
+      "name": "Sample Product 225",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (1267.48830183466) > Regular price (525.779804589213)",
+      "regular_price": 525.779804589213,
+      "sale_price": 1267.48830183466,
+      "discount_percentage": 52.889446074806415
+    },
+    {
+      "product_id": "P0227",
+      "name": "Sample Product 227",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (1199.0429484340386) > Regular price (816.5405631001828)",
+      "regular_price": 816.5405631001828,
+      "sale_price": 1199.0429484340386,
+      "discount_percentage": 25.566140176150252
+    },
+    {
+      "product_id": "P0231",
+      "name": "Sample Product 231",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (1227.4248387401317) > Regular price (1030.1423315551247)",
+      "regular_price": 1030.1423315551247,
+      "sale_price": 1227.4248387401317,
+      "discount_percentage": 22.246595441831463
+    },
+    {
+      "product_id": "P0234",
+      "name": "Sample Product 234",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (557.4808116615486) > Regular price (430.7238262061868)",
+      "regular_price": 430.7238262061868,
+      "sale_price": 557.4808116615486,
+      "discount_percentage": 53.87501190319138
+    },
+    {
+      "product_id": "P0236",
+      "name": "Sample Product 236",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (606.894307911274) > Regular price (597.5061067596688)",
+      "regular_price": 597.5061067596688,
+      "sale_price": 606.894307911274,
+      "discount_percentage": 69.82686873797277
+    },
+    {
+      "product_id": "P0237",
+      "name": "Sample Product 237",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (1230.4011760232183) > Regular price (97.41613454133498)",
+      "regular_price": 97.41613454133498,
+      "sale_price": 1230.4011760232183,
+      "discount_percentage": 40.49074300186679
+    },
+    {
+      "product_id": "P0239",
+      "name": "Sample Product 239",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (584.1083112546141) > Regular price (395.36582484374543)",
+      "regular_price": 395.36582484374543,
+      "sale_price": 584.1083112546141,
+      "discount_percentage": 18.914413677734085
+    },
+    {
+      "product_id": "P0244",
+      "name": "Sample Product 244",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (371.35266186582146) > Regular price (80.14040223129149)",
+      "regular_price": 80.14040223129149,
+      "sale_price": 371.35266186582146,
+      "discount_percentage": 62.076799320724916
+    },
+    {
+      "product_id": "P0251",
+      "name": "Sample Product 251",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (1411.5532217118084) > Regular price (800.9405707737543)",
+      "regular_price": 800.9405707737543,
+      "sale_price": 1411.5532217118084,
+      "discount_percentage": 41.11417636344125
+    },
+    {
+      "product_id": "P0255",
+      "name": "Sample Product 255",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (1197.217028227335) > Regular price (1135.762461793783)",
+      "regular_price": 1135.762461793783,
+      "sale_price": 1197.217028227335,
+      "discount_percentage": 37.2729421174597
+    },
+    {
+      "product_id": "P0258",
+      "name": "Sample Product 258",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (1344.0220970849077) > Regular price (1161.6192816742616)",
+      "regular_price": 1161.6192816742616,
+      "sale_price": 1344.0220970849077,
+      "discount_percentage": 9.815670280635057
+    },
+    {
+      "product_id": "P0259",
+      "name": "Sample Product 259",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (1189.2379005000603) > Regular price (239.49416285299864)",
+      "regular_price": 239.49416285299864,
+      "sale_price": 1189.2379005000603,
+      "discount_percentage": 48.64785514357991
+    },
+    {
+      "product_id": "P0262",
+      "name": "Sample Product 262",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (395.2790355272646) > Regular price (323.16382971122187)",
+      "regular_price": 323.16382971122187,
+      "sale_price": 395.2790355272646,
+      "discount_percentage": 28.277146919268034
+    },
+    {
+      "product_id": "P0263",
+      "name": "Sample Product 263",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (1123.6010500818352) > Regular price (1060.7428221092866)",
+      "regular_price": 1060.7428221092866,
+      "sale_price": 1123.6010500818352,
+      "discount_percentage": 39.14151118113509
+    },
+    {
+      "product_id": "P0269",
+      "name": "Sample Product 269",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (1237.248237867859) > Regular price (622.504096315762)",
+      "regular_price": 622.504096315762,
+      "sale_price": 1237.248237867859,
+      "discount_percentage": 26.874693403197742
+    },
+    {
+      "product_id": "P0274",
+      "name": "Sample Product 274",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (1202.0241876959437) > Regular price (1047.1176777788287)",
+      "regular_price": 1047.1176777788287,
+      "sale_price": 1202.0241876959437,
+      "discount_percentage": 41.03802104433717
+    },
+    {
+      "product_id": "P0281",
+      "name": "Sample Product 281",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (827.8049317209664) > Regular price (709.0905558604949)",
+      "regular_price": 709.0905558604949,
+      "sale_price": 827.8049317209664,
+      "discount_percentage": 57.684872790807795
+    },
+    {
+      "product_id": "P0283",
+      "name": "Sample Product 283",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (538.1731104507616) > Regular price (233.26478268969456)",
+      "regular_price": 233.26478268969456,
+      "sale_price": 538.1731104507616,
+      "discount_percentage": 5.732813556438774
+    },
+    {
+      "product_id": "P0285",
+      "name": "Sample Product 285",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (1365.4223251604337) > Regular price (120.08743390364707)",
+      "regular_price": 120.08743390364707,
+      "sale_price": 1365.4223251604337,
+      "discount_percentage": 43.82837325385336
+    },
+    {
+      "product_id": "P0288",
+      "name": "Sample Product 288",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (709.1485313568751) > Regular price (608.7554416501546)",
+      "regular_price": 608.7554416501546,
+      "sale_price": 709.1485313568751,
+      "discount_percentage": 7.490233159352492
+    },
+    {
+      "product_id": "P0289",
+      "name": "Sample Product 289",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (1422.5065092293685) > Regular price (1202.124858109571)",
+      "regular_price": 1202.124858109571,
+      "sale_price": 1422.5065092293685,
+      "discount_percentage": 10.893387286626556
+    },
+    {
+      "product_id": "P0290",
+      "name": "Sample Product 290",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (255.4265625806379) > Regular price (109.4754873811464)",
+      "regular_price": 109.4754873811464,
+      "sale_price": 255.4265625806379,
+      "discount_percentage": 34.76924571511971
+    },
+    {
+      "product_id": "P0291",
+      "name": "Sample Product 291",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (891.757853064692) > Regular price (122.82896806096811)",
+      "regular_price": 122.82896806096811,
+      "sale_price": 891.757853064692,
+      "discount_percentage": 14.953681553229526
+    },
+    {
+      "product_id": "P0293",
+      "name": "Sample Product 293",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (928.8377260889323) > Regular price (752.3717507519626)",
+      "regular_price": 752.3717507519626,
+      "sale_price": 928.8377260889323,
+      "discount_percentage": 56.70987268529493
+    },
+    {
+      "product_id": "P0295",
+      "name": "Sample Product 295",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (1312.0221461479027) > Regular price (1068.3743571068685)",
+      "regular_price": 1068.3743571068685,
+      "sale_price": 1312.0221461479027,
+      "discount_percentage": 20.011268318360756
+    },
+    {
+      "product_id": "P0297",
+      "name": "Sample Product 297",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (860.7457798761371) > Regular price (470.8510036188442)",
+      "regular_price": 470.8510036188442,
+      "sale_price": 860.7457798761371,
+      "discount_percentage": 12.842588025080019
+    },
+    {
+      "product_id": "P0299",
+      "name": "Sample Product 299",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (1386.0740903306246) > Regular price (216.4275567378476)",
+      "regular_price": 216.4275567378476,
+      "sale_price": 1386.0740903306246,
+      "discount_percentage": 57.98567948651759
+    },
+    {
+      "product_id": "P0300",
+      "name": "Sample Product 300",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (1069.640792440696) > Regular price (150.77935627878503)",
+      "regular_price": 150.77935627878503,
+      "sale_price": 1069.640792440696,
+      "discount_percentage": 7.368960861923153
+    },
+    {
+      "product_id": "P0306",
+      "name": "Sample Product 306",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (1403.5195117104518) > Regular price (1056.785679187331)",
+      "regular_price": 1056.785679187331,
+      "sale_price": 1403.5195117104518,
+      "discount_percentage": 58.556519909932085
+    },
+    {
+      "product_id": "P0307",
+      "name": "Sample Product 307",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (1390.5857139729612) > Regular price (679.7651222354297)",
+      "regular_price": 679.7651222354297,
+      "sale_price": 1390.5857139729612,
+      "discount_percentage": 65.12960623023439
+    },
+    {
+      "product_id": "P0310",
+      "name": "Sample Product 310",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (1477.716562474632) > Regular price (905.9942703759904)",
+      "regular_price": 905.9942703759904,
+      "sale_price": 1477.716562474632,
+      "discount_percentage": 11.008613478850636
+    },
+    {
+      "product_id": "P0311",
+      "name": "Sample Product 311",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (1263.1801870755232) > Regular price (202.98994361741862)",
+      "regular_price": 202.98994361741862,
+      "sale_price": 1263.1801870755232,
+      "discount_percentage": 72.11124920453958
+    },
+    {
+      "product_id": "P0312",
+      "name": "Sample Product 312",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (213.25414136880227) > Regular price (99.43394966014215)",
+      "regular_price": 99.43394966014215,
+      "sale_price": 213.25414136880227,
+      "discount_percentage": 46.069428211530216
+    },
+    {
+      "product_id": "P0316",
+      "name": "Sample Product 316",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (899.174890545046) > Regular price (847.4582416078263)",
+      "regular_price": 847.4582416078263,
+      "sale_price": 899.174890545046,
+      "discount_percentage": 44.48019957020849
+    },
+    {
+      "product_id": "P0317",
+      "name": "Sample Product 317",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (616.5339746890915) > Regular price (387.9239241381493)",
+      "regular_price": 387.9239241381493,
+      "sale_price": 616.5339746890915,
+      "discount_percentage": 59.86921413164989
+    },
+    {
+      "product_id": "P0320",
+      "name": "Sample Product 320",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (1210.1945694390768) > Regular price (1120.991996176935)",
+      "regular_price": 1120.991996176935,
+      "sale_price": 1210.1945694390768,
+      "discount_percentage": 23.532742550760982
+    },
+    {
+      "product_id": "P0323",
+      "name": "Sample Product 323",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (615.3079795786866) > Regular price (595.8710990445885)",
+      "regular_price": 595.8710990445885,
+      "sale_price": 615.3079795786866,
+      "discount_percentage": 21.441049051853323
+    },
+    {
+      "product_id": "P0328",
+      "name": "Sample Product 328",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (1114.1268347213302) > Regular price (868.2201217341903)",
+      "regular_price": 868.2201217341903,
+      "sale_price": 1114.1268347213302,
+      "discount_percentage": 54.40308316256571
+    },
+    {
+      "product_id": "P0329",
+      "name": "Sample Product 329",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (694.7603731080166) > Regular price (533.075429527257)",
+      "regular_price": 533.075429527257,
+      "sale_price": 694.7603731080166,
+      "discount_percentage": 42.36467873398542
+    },
+    {
+      "product_id": "P0332",
+      "name": "Sample Product 332",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (237.05981995830578) > Regular price (78.06730282802394)",
+      "regular_price": 78.06730282802394,
+      "sale_price": 237.05981995830578,
+      "discount_percentage": 22.134105599847405
+    },
+    {
+      "product_id": "P0333",
+      "name": "Sample Product 333",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (289.28887016414825) > Regular price (276.34164898848667)",
+      "regular_price": 276.34164898848667,
+      "sale_price": 289.28887016414825,
+      "discount_percentage": 79.72504370425564
+    },
+    {
+      "product_id": "P0334",
+      "name": "Sample Product 334",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (762.6006259270353) > Regular price (139.70515194241784)",
+      "regular_price": 139.70515194241784,
+      "sale_price": 762.6006259270353,
+      "discount_percentage": 78.10948716100873
+    },
+    {
+      "product_id": "P0335",
+      "name": "Sample Product 335",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (645.8204107716854) > Regular price (129.42116452199178)",
+      "regular_price": 129.42116452199178,
+      "sale_price": 645.8204107716854,
+      "discount_percentage": 53.77442647602027
+    },
+    {
+      "product_id": "P0339",
+      "name": "Sample Product 339",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (959.4285032417097) > Regular price (240.7766132694529)",
+      "regular_price": 240.7766132694529,
+      "sale_price": 959.4285032417097,
+      "discount_percentage": 7.298937665435455
+    },
+    {
+      "product_id": "P0341",
+      "name": "Sample Product 341",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (1005.3999368645646) > Regular price (973.2699530221031)",
+      "regular_price": 973.2699530221031,
+      "sale_price": 1005.3999368645646,
+      "discount_percentage": 39.69672175544872
+    },
+    {
+      "product_id": "P0343",
+      "name": "Sample Product 343",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (1442.7733666800991) > Regular price (896.0107160140474)",
+      "regular_price": 896.0107160140474,
+      "sale_price": 1442.7733666800991,
+      "discount_percentage": 59.5376802324731
+    },
+    {
+      "product_id": "P0347",
+      "name": "Sample Product 347",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (1495.4051502135426) > Regular price (138.3428190554868)",
+      "regular_price": 138.3428190554868,
+      "sale_price": 1495.4051502135426,
+      "discount_percentage": 32.8279072238452
+    },
+    {
+      "product_id": "P0353",
+      "name": "Sample Product 353",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (1350.1398054778492) > Regular price (367.7221328087879)",
+      "regular_price": 367.7221328087879,
+      "sale_price": 1350.1398054778492,
+      "discount_percentage": 59.39432453113524
+    },
+    {
+      "product_id": "P0354",
+      "name": "Sample Product 354",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (331.55527150855056) > Regular price (187.6090574308382)",
+      "regular_price": 187.6090574308382,
+      "sale_price": 331.55527150855056,
+      "discount_percentage": 41.50017060685271
+    },
+    {
+      "product_id": "P0360",
+      "name": "Sample Product 360",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (1170.0255965416657) > Regular price (806.9313561027177)",
+      "regular_price": 806.9313561027177,
+      "sale_price": 1170.0255965416657,
+      "discount_percentage": 73.42725092125183
+    },
+    {
+      "product_id": "P0365",
+      "name": "Sample Product 365",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (852.6712870230803) > Regular price (802.9001437115098)",
+      "regular_price": 802.9001437115098,
+      "sale_price": 852.6712870230803,
+      "discount_percentage": 14.867576384544485
+    },
+    {
+      "product_id": "P0368",
+      "name": "Sample Product 368",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (1296.8248628898705) > Regular price (431.79271283912806)",
+      "regular_price": 431.79271283912806,
+      "sale_price": 1296.8248628898705,
+      "discount_percentage": 18.476233165268148
+    },
+    {
+      "product_id": "P0369",
+      "name": "Sample Product 369",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (1420.7897293364401) > Regular price (185.25453670657265)",
+      "regular_price": 185.25453670657265,
+      "sale_price": 1420.7897293364401,
+      "discount_percentage": 22.815749369290824
+    },
+    {
+      "product_id": "P0370",
+      "name": "Sample Product 370",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (578.7646949312368) > Regular price (246.51710268598197)",
+      "regular_price": 246.51710268598197,
+      "sale_price": 578.7646949312368,
+      "discount_percentage": 77.85463205312297
+    },
+    {
+      "product_id": "P0371",
+      "name": "Sample Product 371",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (427.99466952102404) > Regular price (85.53256002052197)",
+      "regular_price": 85.53256002052197,
+      "sale_price": 427.99466952102404,
+      "discount_percentage": 18.57327145321173
+    },
+    {
+      "product_id": "P0372",
+      "name": "Sample Product 372",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (976.6793285613531) > Regular price (234.16377347406038)",
+      "regular_price": 234.16377347406038,
+      "sale_price": 976.6793285613531,
+      "discount_percentage": 69.07888200271843
+    },
+    {
+      "product_id": "P0377",
+      "name": "Sample Product 377",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (998.6181946079225) > Regular price (95.38027468486044)",
+      "regular_price": 95.38027468486044,
+      "sale_price": 998.6181946079225,
+      "discount_percentage": 43.611301544726764
+    },
+    {
+      "product_id": "P0380",
+      "name": "Sample Product 380",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (369.67995098446494) > Regular price (280.42141386222966)",
+      "regular_price": 280.42141386222966,
+      "sale_price": 369.67995098446494,
+      "discount_percentage": 17.264290443876707
+    },
+    {
+      "product_id": "P0386",
+      "name": "Sample Product 386",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (989.5367785422558) > Regular price (599.9674165140476)",
+      "regular_price": 599.9674165140476,
+      "sale_price": 989.5367785422558,
+      "discount_percentage": 63.01048442649505
+    },
+    {
+      "product_id": "P0391",
+      "name": "Sample Product 391",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (1287.87380811624) > Regular price (854.6044699772816)",
+      "regular_price": 854.6044699772816,
+      "sale_price": 1287.87380811624,
+      "discount_percentage": 10.512256049750949
+    },
+    {
+      "product_id": "P0392",
+      "name": "Sample Product 392",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (1250.4232009134776) > Regular price (775.4352672959271)",
+      "regular_price": 775.4352672959271,
+      "sale_price": 1250.4232009134776,
+      "discount_percentage": 17.731842881565555
+    },
+    {
+      "product_id": "P0394",
+      "name": "Sample Product 394",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (1012.0851507588499) > Regular price (714.5669034933848)",
+      "regular_price": 714.5669034933848,
+      "sale_price": 1012.0851507588499,
+      "discount_percentage": 30.27523823234647
+    },
+    {
+      "product_id": "P0397",
+      "name": "Sample Product 397",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (1347.6136532260462) > Regular price (886.5383533812858)",
+      "regular_price": 886.5383533812858,
+      "sale_price": 1347.6136532260462,
+      "discount_percentage": 23.653570444072244
+    },
+    {
+      "product_id": "P0400",
+      "name": "Sample Product 400",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (335.59279506466015) > Regular price (251.0915442300686)",
+      "regular_price": 251.0915442300686,
+      "sale_price": 335.59279506466015,
+      "discount_percentage": 17.52814309257124
+    },
+    {
+      "product_id": "P0406",
+      "name": "Sample Product 406",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (1231.6420357555082) > Regular price (808.943273531618)",
+      "regular_price": 808.943273531618,
+      "sale_price": 1231.6420357555082,
+      "discount_percentage": 68.31278367268979
+    },
+    {
+      "product_id": "P0407",
+      "name": "Sample Product 407",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (532.4715069958777) > Regular price (71.1334203865818)",
+      "regular_price": 71.1334203865818,
+      "sale_price": 532.4715069958777,
+      "discount_percentage": 65.42526147125399
+    },
+    {
+      "product_id": "P0409",
+      "name": "Sample Product 409",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (588.1478400058824) > Regular price (228.00901973296044)",
+      "regular_price": 228.00901973296044,
+      "sale_price": 588.1478400058824,
+      "discount_percentage": 70.1203460384944
+    },
+    {
+      "product_id": "P0410",
+      "name": "Sample Product 410",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (897.7335654967674) > Regular price (672.661593301309)",
+      "regular_price": 672.661593301309,
+      "sale_price": 897.7335654967674,
+      "discount_percentage": 20.438090752757617
+    },
+    {
+      "product_id": "P0417",
+      "name": "Sample Product 417",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (1424.2263612343704) > Regular price (690.8958634713362)",
+      "regular_price": 690.8958634713362,
+      "sale_price": 1424.2263612343704,
+      "discount_percentage": 14.15824355075201
+    },
+    {
+      "product_id": "P0422",
+      "name": "Sample Product 422",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (1344.9917735343145) > Regular price (227.8519009449462)",
+      "regular_price": 227.8519009449462,
+      "sale_price": 1344.9917735343145,
+      "discount_percentage": 8.117964428779407
+    },
+    {
+      "product_id": "P0423",
+      "name": "Sample Product 423",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (1205.7872262425533) > Regular price (1014.1195941700339)",
+      "regular_price": 1014.1195941700339,
+      "sale_price": 1205.7872262425533,
+      "discount_percentage": 16.125740072156667
+    },
+    {
+      "product_id": "P0424",
+      "name": "Sample Product 424",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (655.0638515697732) > Regular price (162.23958203245635)",
+      "regular_price": 162.23958203245635,
+      "sale_price": 655.0638515697732,
+      "discount_percentage": 78.99725922191352
+    },
+    {
+      "product_id": "P0428",
+      "name": "Sample Product 428",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (961.2129831444365) > Regular price (734.2842744765535)",
+      "regular_price": 734.2842744765535,
+      "sale_price": 961.2129831444365,
+      "discount_percentage": 52.933995336162525
+    },
+    {
+      "product_id": "P0429",
+      "name": "Sample Product 429",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (409.09489758680735) > Regular price (278.28068203383145)",
+      "regular_price": 278.28068203383145,
+      "sale_price": 409.09489758680735,
+      "discount_percentage": 70.09387208900166
+    },
+    {
+      "product_id": "P0432",
+      "name": "Sample Product 432",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (1477.0712056342215) > Regular price (1255.5252234667091)",
+      "regular_price": 1255.5252234667091,
+      "sale_price": 1477.0712056342215,
+      "discount_percentage": 41.66349351926901
+    },
+    {
+      "product_id": "P0433",
+      "name": "Sample Product 433",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (802.7645679849481) > Regular price (247.18921843944096)",
+      "regular_price": 247.18921843944096,
+      "sale_price": 802.7645679849481,
+      "discount_percentage": 55.01481931595782
+    },
+    {
+      "product_id": "P0434",
+      "name": "Sample Product 434",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (282.36855019700613) > Regular price (214.008271924245)",
+      "regular_price": 214.008271924245,
+      "sale_price": 282.36855019700613,
+      "discount_percentage": 15.473844106723467
+    },
+    {
+      "product_id": "P0439",
+      "name": "Sample Product 439",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (877.4792190059527) > Regular price (208.63012225170453)",
+      "regular_price": 208.63012225170453,
+      "sale_price": 877.4792190059527,
+      "discount_percentage": 55.5074324993688
+    },
+    {
+      "product_id": "P0440",
+      "name": "Sample Product 440",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (432.8611744101928) > Regular price (215.43354246612424)",
+      "regular_price": 215.43354246612424,
+      "sale_price": 432.8611744101928,
+      "discount_percentage": 77.74340345804528
+    },
+    {
+      "product_id": "P0442",
+      "name": "Sample Product 442",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (987.5879708772404) > Regular price (779.8280517244347)",
+      "regular_price": 779.8280517244347,
+      "sale_price": 987.5879708772404,
+      "discount_percentage": 55.44515886688447
+    },
+    {
+      "product_id": "P0443",
+      "name": "Sample Product 443",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (1249.7204514495863) > Regular price (772.7521867804372)",
+      "regular_price": 772.7521867804372,
+      "sale_price": 1249.7204514495863,
+      "discount_percentage": 38.28126644784284
+    },
+    {
+      "product_id": "P0448",
+      "name": "Sample Product 448",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (1314.6184140168973) > Regular price (783.7061917852857)",
+      "regular_price": 783.7061917852857,
+      "sale_price": 1314.6184140168973,
+      "discount_percentage": 75.84606646055174
+    },
+    {
+      "product_id": "P0449",
+      "name": "Sample Product 449",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (908.1972601903532) > Regular price (212.82639756240408)",
+      "regular_price": 212.82639756240408,
+      "sale_price": 908.1972601903532,
+      "discount_percentage": 56.243602121723434
+    },
+    {
+      "product_id": "P0454",
+      "name": "Sample Product 454",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (645.5926715913474) > Regular price (266.8350904969951)",
+      "regular_price": 266.8350904969951,
+      "sale_price": 645.5926715913474,
+      "discount_percentage": 7.279029477262764
+    },
+    {
+      "product_id": "P0456",
+      "name": "Sample Product 456",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (792.8090267657711) > Regular price (72.13960729646718)",
+      "regular_price": 72.13960729646718,
+      "sale_price": 792.8090267657711,
+      "discount_percentage": 56.71450632736708
+    },
+    {
+      "product_id": "P0458",
+      "name": "Sample Product 458",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (274.4365520714367) > Regular price (159.79138757958282)",
+      "regular_price": 159.79138757958282,
+      "sale_price": 274.4365520714367,
+      "discount_percentage": 21.17563642982879
+    },
+    {
+      "product_id": "P0459",
+      "name": "Sample Product 459",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (1114.9094161467644) > Regular price (281.69493672274024)",
+      "regular_price": 281.69493672274024,
+      "sale_price": 1114.9094161467644,
+      "discount_percentage": 54.41641026744929
+    },
+    {
+      "product_id": "P0466",
+      "name": "Sample Product 466",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (1086.9974806208409) > Regular price (607.1385682496284)",
+      "regular_price": 607.1385682496284,
+      "sale_price": 1086.9974806208409,
+      "discount_percentage": 78.2880638165988
+    },
+    {
+      "product_id": "P0468",
+      "name": "Sample Product 468",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (862.6148212364388) > Regular price (486.01188511293265)",
+      "regular_price": 486.01188511293265,
+      "sale_price": 862.6148212364388,
+      "discount_percentage": 70.30650877529443
+    },
+    {
+      "product_id": "P0470",
+      "name": "Sample Product 470",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (1005.5966130830927) > Regular price (73.70122564514186)",
+      "regular_price": 73.70122564514186,
+      "sale_price": 1005.5966130830927,
+      "discount_percentage": 47.52621957400009
+    },
+    {
+      "product_id": "P0472",
+      "name": "Sample Product 472",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (1106.880982899068) > Regular price (134.16182830362342)",
+      "regular_price": 134.16182830362342,
+      "sale_price": 1106.880982899068,
+      "discount_percentage": 70.88866709760109
+    },
+    {
+      "product_id": "P0476",
+      "name": "Sample Product 476",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (904.7645581293746) > Regular price (193.9033012340278)",
+      "regular_price": 193.9033012340278,
+      "sale_price": 904.7645581293746,
+      "discount_percentage": 65.58844564559439
+    },
+    {
+      "product_id": "P0486",
+      "name": "Sample Product 486",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (1041.9515227487718) > Regular price (138.62044166584286)",
+      "regular_price": 138.62044166584286,
+      "sale_price": 1041.9515227487718,
+      "discount_percentage": 34.712951870694155
+    },
+    {
+      "product_id": "P0487",
+      "name": "Sample Product 487",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (669.196187747507) > Regular price (597.8782197048491)",
+      "regular_price": 597.8782197048491,
+      "sale_price": 669.196187747507,
+      "discount_percentage": 57.160040501739665
+    },
+    {
+      "product_id": "P0490",
+      "name": "Sample Product 490",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (1205.1413420843994) > Regular price (938.5306679321402)",
+      "regular_price": 938.5306679321402,
+      "sale_price": 1205.1413420843994,
+      "discount_percentage": 22.81580981557456
+    },
+    {
+      "product_id": "P0493",
+      "name": "Sample Product 493",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (897.639080297558) > Regular price (416.8362614613346)",
+      "regular_price": 416.8362614613346,
+      "sale_price": 897.639080297558,
+      "discount_percentage": 10.489694282633273
+    },
+    {
+      "product_id": "P0496",
+      "name": "Sample Product 496",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (1378.450955929497) > Regular price (1188.1294181092005)",
+      "regular_price": 1188.1294181092005,
+      "sale_price": 1378.450955929497,
+      "discount_percentage": 51.46177595072109
+    },
+    {
+      "product_id": "P0497",
+      "name": "Sample Product 497",
+      "error_type": "invalid_price_relationship",
+      "severity": "high",
+      "description": "Sale price (231.12338745087325) > Regular price (201.58254208172045)",
+      "regular_price": 201.58254208172045,
+      "sale_price": 231.12338745087325,
+      "discount_percentage": 39.762053285042924
+    }
+  ],
+  "high_discount_products": [
+    {
+      "product_id": "P0464",
+      "name": "Sample Product 464",
+      "category": null,
+      "regular_price": 1926.2364695253568,
+      "sale_price": 454.3797930529288,
+      "discount_percentage": 79.9560294328,
+      "discount_severity": "Very High"
+    },
+    {
+      "product_id": "P0054",
+      "name": "Sample Product 54",
+      "category": null,
+      "regular_price": 1215.904958681616,
+      "sale_price": 1318.680795907767,
+      "discount_percentage": 79.84505829000031,
+      "discount_severity": "Very High"
+    },
+    {
+      "product_id": "P0209",
+      "name": "Sample Product 209",
+      "category": null,
+      "regular_price": 363.57570026412236,
+      "sale_price": 1031.809001669176,
+      "discount_percentage": 79.78433751182834,
+      "discount_severity": "Very High"
+    },
+    {
+      "product_id": "P0333",
+      "name": "Sample Product 333",
+      "category": null,
+      "regular_price": 276.34164898848667,
+      "sale_price": 289.28887016414825,
+      "discount_percentage": 79.72504370425564,
+      "discount_severity": "Very High"
+    },
+    {
+      "product_id": "P0104",
+      "name": "Sample Product 104",
+      "category": null,
+      "regular_price": 1819.7546241558814,
+      "sale_price": 207.3347305178832,
+      "discount_percentage": 79.61808669848264,
+      "discount_severity": "Very High"
+    },
+    {
+      "product_id": "P0088",
+      "name": "Sample Product 88",
+      "category": null,
+      "regular_price": 1780.0648480238367,
+      "sale_price": 218.2273832679255,
+      "discount_percentage": 79.33764696027325,
+      "discount_severity": "Very High"
+    },
+    {
+      "product_id": "P0074",
+      "name": "Sample Product 74",
+      "category": null,
+      "regular_price": 1428.3718205028533,
+      "sale_price": 1297.6746518577154,
+      "discount_percentage": 79.07917923020237,
+      "discount_severity": "Very High"
+    },
+    {
+      "product_id": "P0011",
+      "name": "Sample Product 11",
+      "category": null,
+      "regular_price": 1941.3242117158889,
+      "sale_price": 644.8172633472097,
+      "discount_percentage": 79.07510059974852,
+      "discount_severity": "Very High"
+    },
+    {
+      "product_id": "P0348",
+      "name": "Sample Product 348",
+      "category": null,
+      "regular_price": 780.4945985216189,
+      "sale_price": 768.2266651869267,
+      "discount_percentage": 79.07371728020433,
+      "discount_severity": "Very High"
+    },
+    {
+      "product_id": "P0277",
+      "name": "Sample Product 277",
+      "category": null,
+      "regular_price": 1317.429665016642,
+      "sale_price": 1091.7112755378075,
+      "discount_percentage": 78.99969449503598,
+      "discount_severity": "Very High"
+    },
+    {
+      "product_id": "P0424",
+      "name": "Sample Product 424",
+      "category": null,
+      "regular_price": 162.23958203245635,
+      "sale_price": 655.0638515697732,
+      "discount_percentage": 78.99725922191352,
+      "discount_severity": "Very High"
+    },
+    {
+      "product_id": "P0061",
+      "name": "Sample Product 61",
+      "category": null,
+      "regular_price": 579.130611959097,
+      "sale_price": 343.05731741809876,
+      "discount_percentage": 78.80626018994714,
+      "discount_severity": "Very High"
+    },
+    {
+      "product_id": "P0228",
+      "name": "Sample Product 228",
+      "category": null,
+      "regular_price": 1789.490782595371,
+      "sale_price": 326.3921604701845,
+      "discount_percentage": 78.79832359698712,
+      "discount_severity": "Very High"
+    },
+    {
+      "product_id": "P0171",
+      "name": "Sample Product 171",
+      "category": null,
+      "regular_price": 82.3462664093195,
+      "sale_price": 1348.245174200845,
+      "discount_percentage": 78.58896335205677,
+      "discount_severity": "Very High"
+    },
+    {
+      "product_id": "P0466",
+      "name": "Sample Product 466",
+      "category": null,
+      "regular_price": 607.1385682496284,
+      "sale_price": 1086.9974806208409,
+      "discount_percentage": 78.2880638165988,
+      "discount_severity": "Very High"
+    },
+    {
+      "product_id": "P0324",
+      "name": "Sample Product 324",
+      "category": null,
+      "regular_price": 1911.9872972932285,
+      "sale_price": 819.9715363187466,
+      "discount_percentage": 78.18989418643484,
+      "discount_severity": "Very High"
+    },
+    {
+      "product_id": "P0334",
+      "name": "Sample Product 334",
+      "category": null,
+      "regular_price": 139.70515194241784,
+      "sale_price": 762.6006259270353,
+      "discount_percentage": 78.10948716100873,
+      "discount_severity": "Very High"
+    },
+    {
+      "product_id": "P0196",
+      "name": "Sample Product 196",
+      "category": null,
+      "regular_price": 1465.6135737969669,
+      "sale_price": 454.28691326317596,
+      "discount_percentage": 78.01167268830477,
+      "discount_severity": "Very High"
+    },
+    {
+      "product_id": "P0370",
+      "name": "Sample Product 370",
+      "category": null,
+      "regular_price": 246.51710268598197,
+      "sale_price": 578.7646949312368,
+      "discount_percentage": 77.85463205312297,
+      "discount_severity": "Very High"
+    },
+    {
+      "product_id": "P0023",
+      "name": "Sample Product 23",
+      "category": null,
+      "regular_price": 764.4055944226989,
+      "sale_price": 1267.9148170094918,
+      "discount_percentage": 77.82936838740258,
+      "discount_severity": "Very High"
+    },
+    {
+      "product_id": "P0440",
+      "name": "Sample Product 440",
+      "category": null,
+      "regular_price": 215.43354246612424,
+      "sale_price": 432.8611744101928,
+      "discount_percentage": 77.74340345804528,
+      "discount_severity": "Very High"
+    },
+    {
+      "product_id": "P0388",
+      "name": "Sample Product 388",
+      "category": null,
+      "regular_price": 1513.6987656996737,
+      "sale_price": 176.17884735623738,
+      "discount_percentage": 77.73657838089085,
+      "discount_severity": "Very High"
+    },
+    {
+      "product_id": "P0382",
+      "name": "Sample Product 382",
+      "category": null,
+      "regular_price": 1276.438551220774,
+      "sale_price": 58.97449049891531,
+      "discount_percentage": 77.70592417514656,
+      "discount_severity": "Very High"
+    },
+    {
+      "product_id": "P0101",
+      "name": "Sample Product 101",
+      "category": null,
+      "regular_price": 1291.0003019643718,
+      "sale_price": 439.52779837697915,
+      "discount_percentage": 77.68269726056084,
+      "discount_severity": "Very High"
+    },
+    {
+      "product_id": "P0197",
+      "name": "Sample Product 197",
+      "category": null,
+      "regular_price": 1799.3650069075254,
+      "sale_price": 884.4201854912401,
+      "discount_percentage": 77.66583914642686,
+      "discount_severity": "Very High"
+    },
+    {
+      "product_id": "P0238",
+      "name": "Sample Product 238",
+      "category": null,
+      "regular_price": 1308.6709770189773,
+      "sale_price": 675.5283155982211,
+      "discount_percentage": 77.61450709360413,
+      "discount_severity": "Very High"
+    },
+    {
+      "product_id": "P0425",
+      "name": "Sample Product 425",
+      "category": null,
+      "regular_price": 1121.5813205312843,
+      "sale_price": 63.02988323057257,
+      "discount_percentage": 77.38390223270342,
+      "discount_severity": "Very High"
+    },
+    {
+      "product_id": "P0180",
+      "name": "Sample Product 180",
+      "category": null,
+      "regular_price": 715.0793845480041,
+      "sale_price": 1231.0959442954415,
+      "discount_percentage": 77.2244002894246,
+      "discount_severity": "Very High"
+    },
+    {
+      "product_id": "P0121",
+      "name": "Sample Product 121",
+      "category": null,
+      "regular_price": 1797.378034850812,
+      "sale_price": 337.7435053049641,
+      "discount_percentage": 76.67386236723151,
+      "discount_severity": "Very High"
+    },
+    {
+      "product_id": "P0427",
+      "name": "Sample Product 427",
+      "category": null,
+      "regular_price": 1781.0231563786845,
+      "sale_price": 826.2022955514743,
+      "discount_percentage": 76.38588390674292,
+      "discount_severity": "Very High"
+    },
+    {
+      "product_id": "P0220",
+      "name": "Sample Product 220",
+      "category": null,
+      "regular_price": 1332.3451399856697,
+      "sale_price": 1409.3604715269257,
+      "discount_percentage": 76.31476716878078,
+      "discount_severity": "Very High"
+    },
+    {
+      "product_id": "P0079",
+      "name": "Sample Product 79",
+      "category": null,
+      "regular_price": 275.94466607400295,
+      "sale_price": 409.6192507994688,
+      "discount_percentage": 76.2470887962669,
+      "discount_severity": "Very High"
+    },
+    {
+      "product_id": "P0084",
+      "name": "Sample Product 84",
+      "category": null,
+      "regular_price": 656.4155273455412,
+      "sale_price": 961.0992558455869,
+      "discount_percentage": 75.85490167185577,
+      "discount_severity": "Very High"
+    },
+    {
+      "product_id": "P0448",
+      "name": "Sample Product 448",
+      "category": null,
+      "regular_price": 783.7061917852857,
+      "sale_price": 1314.6184140168973,
+      "discount_percentage": 75.84606646055174,
+      "discount_severity": "Very High"
+    },
+    {
+      "product_id": "P0024",
+      "name": "Sample Product 24",
+      "category": null,
+      "regular_price": 939.3364692232201,
+      "sale_price": 1262.3431959253726,
+      "discount_percentage": 75.81998668350754,
+      "discount_severity": "Very High"
+    },
+    {
+      "product_id": "P0012",
+      "name": "Sample Product 12",
+      "category": null,
+      "regular_price": 1673.2631495608223,
+      "sale_price": 1401.1108705303996,
+      "discount_percentage": 75.804450476496,
+      "discount_severity": "Very High"
+    },
+    {
+      "product_id": "P0223",
+      "name": "Sample Product 223",
+      "category": null,
+      "regular_price": 767.0458159658954,
+      "sale_price": 1119.4473544563868,
+      "discount_percentage": 75.77119401256992,
+      "discount_severity": "Very High"
+    },
+    {
+      "product_id": "P0090",
+      "name": "Sample Product 90",
+      "category": null,
+      "regular_price": 283.2087795796883,
+      "sale_price": 234.0759437946329,
+      "discount_percentage": 75.70488306013442,
+      "discount_severity": "Very High"
+    },
+    {
+      "product_id": "P0052",
+      "name": "Sample Product 52",
+      "category": null,
+      "regular_price": 1882.0229360501687,
+      "sale_price": 841.3030529984937,
+      "discount_percentage": 75.43007738846721,
+      "discount_severity": "Very High"
+    },
+    {
+      "product_id": "P0185",
+      "name": "Sample Product 185",
+      "category": null,
+      "regular_price": 1336.9688897666492,
+      "sale_price": 848.4414527304767,
+      "discount_percentage": 75.29213654273383,
+      "discount_severity": "Very High"
+    },
+    {
+      "product_id": "P0415",
+      "name": "Sample Product 415",
+      "category": null,
+      "regular_price": 924.4687678577236,
+      "sale_price": 671.1059978289155,
+      "discount_percentage": 75.2454269221221,
+      "discount_severity": "Very High"
+    },
+    {
+      "product_id": "P0301",
+      "name": "Sample Product 301",
+      "category": null,
+      "regular_price": 1086.1415315578886,
+      "sale_price": 254.23239308396418,
+      "discount_percentage": 75.21591846827674,
+      "discount_severity": "Very High"
+    },
+    {
+      "product_id": "P0419",
+      "name": "Sample Product 419",
+      "category": null,
+      "regular_price": 1517.1303324034761,
+      "sale_price": 235.96636837668524,
+      "discount_percentage": 75.04062631459287,
+      "discount_severity": "Very High"
+    }
+  ]
+}

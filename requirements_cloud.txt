@@ -1,0 +1,23 @@
+# Streamlit Cloud Requirements
+# Minimal dependencies for cloud deployment
+
+# Core data processing
+pandas>=2.1.0
+numpy>=1.24.0
+
+# UI Framework
+streamlit>=1.28.0
+plotly>=5.17.0
+
+# Database
+sqlalchemy>=2.0.0
+
+# Utilities
+pyyaml>=6.0.0
+python-dotenv>=1.0.0
+
+# Web requests (for any API calls)
+requests>=2.31.0
+
+# Date/time handling
+python-dateutil>=2.8.0
