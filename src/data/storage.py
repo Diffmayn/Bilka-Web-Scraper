@@ -154,6 +154,9 @@ class DataStorage:
         """
         session = self.get_session()
         try:
+            # Ensure tables exist
+            Base.metadata.create_all(self.engine)
+            
             query = session.query(Product)
 
             if category:
@@ -162,6 +165,9 @@ class DataStorage:
             products = query.order_by(Product.scraped_at.desc()).limit(limit).all()
             return products
 
+        except Exception as e:
+            logger.error(f"Error retrieving products: {e}")
+            return []
         finally:
             session.close()
 

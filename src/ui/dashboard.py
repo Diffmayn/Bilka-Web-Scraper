@@ -34,31 +34,40 @@ def main():
     st.markdown("**Advanced Price Monitoring & Deal Detection for Bilka.dk**")
     st.markdown("---")
 
-    # Initialize components
+    # Initialize database and components
+    try:
+        from src.data.storage import initialize_database
+        initialize_database()
+    except Exception as e:
+        st.warning(f"Database initialization: {e}")
+    
     storage = create_data_storage()
 
     # Sidebar
     with st.sidebar:
         st.header("⚙️ Controls")
+        
+        # Demo notice
+        st.info("**🎭 Demo Mode**\n\nThis app generates mock data for demonstration. Real web scraping requires ChromeDriver setup.")
 
         # Scraping section
-        st.subheader("🔍 Scrape Products")
+        st.subheader("🔍 Generate Sample Data")
         category = st.selectbox(
             "Category",
             ["electronics", "home", "fashion", "sports"],
-            help="Select product category to scrape"
+            help="Select product category to generate"
         )
 
         max_products = st.slider(
-            "Max Products",
+            "Number of Products",
             min_value=10,
             max_value=200,
             value=50,
             step=10,
-            help="Maximum number of products to scrape"
+            help="Number of sample products to generate"
         )
 
-        if st.button("🚀 Start Scraping", type="primary"):
+        if st.button("🚀 Generate Sample Data", type="primary"):
             scrape_products(category, max_products, storage)
 
         st.markdown("---")
@@ -95,7 +104,8 @@ def scrape_products(category: str, max_products: int, storage: DataStorage):
     """Scrape products and store in database"""
     with st.spinner(f"Scraping {max_products} products from {category}..."):
         try:
-            # Use mock scraper for demo (change to real scraper in production)
+            # Always use mock scraper for Streamlit Cloud deployment
+            # (Real scraping requires ChromeDriver which isn't available on Streamlit Cloud)
             import os
             os.environ['USE_MOCK_SCRAPER'] = 'true'
 
@@ -137,10 +147,39 @@ def display_dashboard(storage: DataStorage, min_confidence: float, show_suspicio
     """Display the main dashboard"""
 
     # Get products from database
-    products = storage.get_products(limit=500)
+    try:
+        products = storage.get_products(limit=500)
+    except Exception as e:
+        st.error("⚠️ Database not initialized. Click 'Start Scraping' to generate sample data.")
+        st.info("""
+        **Welcome to Bilka Price Monitor! 🛒**
+        
+        This app uses **mock data** for demonstration purposes (real web scraping requires ChromeDriver).
+        
+        **To get started:**
+        1. Select a category from the sidebar
+        2. Choose how many products to generate (10-200)
+        3. Click "🚀 Start Scraping" to generate sample data
+        
+        The app will create realistic product data with various discounts, 
+        including some "too good to be true" deals for testing the anomaly detection.
+        """)
+        return
 
     if not products:
-        st.info("📭 No products in database yet. Use the sidebar to scrape some products!")
+        st.info("""
+        **Welcome to Bilka Price Monitor! 🛒**
+        
+        This app uses **mock data** for demonstration purposes (real web scraping requires ChromeDriver).
+        
+        **To get started:**
+        1. Select a category from the sidebar
+        2. Choose how many products to generate (10-200)
+        3. Click "🚀 Start Scraping" to generate sample data
+        
+        The app will create realistic product data with various discounts, 
+        including some "too good to be true" deals for testing the anomaly detection.
+        """)
         return
 
     # Convert to DataFrame
