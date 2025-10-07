@@ -36,10 +36,24 @@ def main():
 
     # Initialize database and components
     try:
-        from src.data.storage import initialize_database
+        from src.data.storage import initialize_database, reset_database
+        
+        # Try to initialize normally
         initialize_database()
+        
+        # Test if schema is correct by trying to query
+        test_storage = create_data_storage()
+        try:
+            test_storage.get_products(limit=1)
+        except Exception as schema_error:
+            # Schema mismatch detected - recreate database
+            st.warning(f"⚠️ Detected old database schema. Recreating database...")
+            reset_database()
+            initialize_database()
+            st.success("✅ Database schema updated!")
+            
     except Exception as e:
-        st.warning(f"Database initialization: {e}")
+        st.error(f"❌ Database initialization error: {e}")
     
     storage = create_data_storage()
 

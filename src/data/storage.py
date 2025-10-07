@@ -15,6 +15,23 @@ from .models import Base, Product, PriceHistory, ScrapeLog, AnomalyDetection
 logger = logging.getLogger(__name__)
 
 
+def reset_database(database_url: Optional[str] = None):
+    """
+    Reset the database by dropping all tables and recreating them
+    
+    Args:
+        database_url: Database connection URL (defaults to SQLite in data/)
+    """
+    if database_url is None:
+        os.makedirs("data", exist_ok=True)
+        database_url = "sqlite:///data/bilka_prices.db"
+
+    engine = create_engine(database_url, echo=False)
+    Base.metadata.drop_all(engine)
+    Base.metadata.create_all(engine)
+    logger.info(f"Database reset: {database_url}")
+
+
 def initialize_database(database_url: Optional[str] = None):
     """
     Initialize the database and create all tables
