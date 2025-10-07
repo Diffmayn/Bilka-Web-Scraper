@@ -1,1 +1,7 @@
-# Bilka Price Monitor - UI Package
+"""
+UI module for dashboard and visualization
+"""
+
+from .dashboard import main
+
+__all__ = ['main']

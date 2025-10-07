@@ -1,394 +1,250 @@
 """
-Data Storage Layer for Bilka Price Monitor
-
-Handles database operations, data persistence, and retrieval.
-Provides high-level interface for storing and querying product data.
+Data storage and database operations
 """
 
-from typing import List, Dict, Optional, Any
-from datetime import datetime, timedelta
-import pandas as pd
-from loguru import logger
+import os
+import logging
+from typing import Dict, List, Optional
+from datetime import datetime
+from sqlalchemy import create_engine, func
+from sqlalchemy.orm import sessionmaker, Session
+from sqlalchemy.exc import SQLAlchemyError
 
-from .models import (
-    DatabaseManager, Product, PriceHistory, ScrapingSession,
-    get_database_manager, init_database
-)
-from src.scraper.product_parser import ProductData
+from .models import Base, Product, PriceHistory, ScrapeLog, AnomalyDetection
+
+logger = logging.getLogger(__name__)
+
+
+def initialize_database(database_url: Optional[str] = None):
+    """
+    Initialize the database and create all tables
+    
+    Args:
+        database_url: Database connection URL (defaults to SQLite in data/)
+    """
+    if database_url is None:
+        os.makedirs("data", exist_ok=True)
+        database_url = "sqlite:///data/bilka_prices.db"
+
+    engine = create_engine(database_url, echo=False)
+    Base.metadata.create_all(engine)
+    logger.info(f"Database initialized: {database_url}")
+
+
+def create_data_storage(database_url: Optional[str] = None) -> 'DataStorage':
+    """
+    Create a DataStorage instance
+    
+    Args:
+        database_url: Database connection URL
+        
+    Returns:
+        DataStorage instance
+    """
+    if database_url is None:
+        database_url = "sqlite:///data/bilka_prices.db"
+
+    return DataStorage(database_url)
 
 
 class DataStorage:
-    """
-    Data storage class for managing product data persistence.
+    """Handles all database operations"""
 
-    Provides methods for storing scraped data, retrieving historical information,
-    and generating reports.
-    """
+    def __init__(self, database_url: str = "sqlite:///data/bilka_prices.db"):
+        self.database_url = database_url
+        self.engine = create_engine(database_url, echo=False)
+        self.SessionLocal = sessionmaker(bind=self.engine)
 
-    def __init__(self, database_url: str = None):
+    def get_session(self) -> Session:
+        """Get a new database session"""
+        return self.SessionLocal()
+
+    def store_product(self, product_data: Dict) -> Optional[Product]:
         """
-        Initialize the data storage.
-
+        Store a single product in the database
+        
         Args:
-            database_url: Database connection URL
-        """
-        self.db_manager = get_database_manager(database_url)
-        logger.info("Data storage initialized")
-
-    def store_product_data(self, product_data: ProductData) -> bool:
-        """
-        Store product data in the database.
-
-        Args:
-            product_data: ProductData object to store
-
+            product_data: Dictionary containing product information
+            
         Returns:
-            True if successful, False otherwise
+            Product instance or None if failed
         """
-        session = None
+        session = self.get_session()
         try:
-            session = self.db_manager.get_session()
+            # Check if product already exists
+            existing = session.query(Product).filter_by(
+                name=product_data['name']
+            ).first()
 
-            # Prepare product data for database
-            product_dict = {
-                'external_id': product_data.external_id,
-                'name': product_data.name,
-                'category': product_data.category,
-                'subcategory': product_data.subcategory,
-                'brand': product_data.brand,
-                'image_url': product_data.image_url
-            }
+            if existing:
+                # Update existing product
+                for key, value in product_data.items():
+                    if hasattr(existing, key):
+                        setattr(existing, key, value)
+                existing.updated_at = datetime.utcnow()
+                product = existing
+            else:
+                # Create new product
+                product = Product(**product_data)
+                session.add(product)
 
-            # Add or update product
-            product = self.db_manager.add_product(session, product_dict)
+            session.commit()
+            session.refresh(product)
 
-            # Add price history if pricing data is available
-            if product_data.regular_price is not None or product_data.sale_price is not None:
-                price_dict = {
-                    'regular_price': product_data.regular_price,
-                    'sale_price': product_data.sale_price,
-                    'discount_percentage': product_data.discount_percentage,
-                    'currency': product_data.currency,
-                    'scraped_at': datetime.fromisoformat(product_data.scraped_at) if product_data.scraped_at else datetime.utcnow()
-                }
-                self.db_manager.add_price_history(session, product.id, price_dict)
+            # Store price history
+            self._store_price_history(session, product)
 
-            logger.debug(f"Stored product data: {product_data.name}")
-            return True
+            logger.info(f"Stored product: {product.name}")
+            return product
 
-        except Exception as e:
-            logger.error(f"Error storing product data: {e}")
-            return False
+        except SQLAlchemyError as e:
+            session.rollback()
+            logger.error(f"Error storing product: {e}")
+            return None
         finally:
-            if session:
-                self.db_manager.close_session(session)
+            session.close()
 
-    def store_multiple_products(self, products: List[ProductData]) -> Dict[str, int]:
+    def _store_price_history(self, session: Session, product: Product):
+        """Store price history for a product"""
+        try:
+            price_entry = PriceHistory(
+                product_id=product.id,
+                price=product.current_price,
+                original_price=product.original_price,
+                discount_percentage=product.discount_percentage
+            )
+            session.add(price_entry)
+            session.commit()
+        except SQLAlchemyError as e:
+            logger.warning(f"Error storing price history: {e}")
+
+    def store_multiple_products(self, products: List[Dict]) -> Dict:
         """
-        Store multiple products in the database.
-
+        Store multiple products in the database
+        
         Args:
-            products: List of ProductData objects
-
+            products: List of product dictionaries
+            
         Returns:
             Dictionary with success/failure counts
         """
-        successful = 0
-        failed = 0
+        results = {'successful': 0, 'failed': 0, 'errors': []}
 
         for product_data in products:
-            if self.store_product_data(product_data):
-                successful += 1
-            else:
-                failed += 1
-
-        logger.info(f"Stored {successful} products successfully, {failed} failed")
-        return {'successful': successful, 'failed': failed}
-
-    def get_product_by_external_id(self, external_id: str) -> Optional[Product]:
-        """
-        Get product by external ID.
-
-        Args:
-            external_id: External product ID
-
-        Returns:
-            Product object or None if not found
-        """
-        session = None
-        try:
-            session = self.db_manager.get_session()
-            product = session.query(Product).filter_by(external_id=external_id).first()
-            return product
-        except Exception as e:
-            logger.error(f"Error getting product by external ID: {e}")
-            return None
-        finally:
-            if session:
-                self.db_manager.close_session(session)
-
-    def get_product_price_history(self, external_id: str, limit: int = 50) -> List[PriceHistory]:
-        """
-        Get price history for a product.
-
-        Args:
-            external_id: External product ID
-            limit: Maximum number of records to return
-
-        Returns:
-            List of PriceHistory objects
-        """
-        session = None
-        try:
-            session = self.db_manager.get_session()
-            product = session.query(Product).filter_by(external_id=external_id).first()
-
+            product = self.store_product(product_data)
             if product:
-                return self.db_manager.get_recent_price_history(session, product.id, limit)
+                results['successful'] += 1
             else:
-                return []
+                results['failed'] += 1
+                results['errors'].append(product_data.get('name', 'Unknown'))
 
-        except Exception as e:
-            logger.error(f"Error getting price history: {e}")
-            return []
-        finally:
-            if session:
-                self.db_manager.close_session(session)
+        logger.info(f"Stored {results['successful']}/{len(products)} products successfully")
+        return results
 
-    def get_products_by_category(self, category: str, limit: int = 100) -> List[Dict[str, Any]]:
+    def get_products(self, category: Optional[str] = None, limit: int = 100) -> List[Product]:
         """
-        Get products by category with their latest pricing.
-
+        Retrieve products from the database
+        
         Args:
-            category: Product category
-            limit: Maximum number of products to return
-
+            category: Filter by category (optional)
+            limit: Maximum number of products to retrieve
+            
         Returns:
-            List of dictionaries with product and pricing information
+            List of Product instances
         """
-        session = None
+        session = self.get_session()
         try:
-            session = self.db_manager.get_session()
-
-            # Query products with their latest price history
-            query = session.query(Product, PriceHistory).join(PriceHistory).filter(
-                Product.category == category
-            ).order_by(PriceHistory.scraped_at.desc()).limit(limit)
-
-            results = []
-            seen_products = set()
-
-            for product, price_history in query:
-                if product.id not in seen_products:
-                    seen_products.add(product.id)
-                    results.append({
-                        'product': product,
-                        'latest_price': price_history
-                    })
-
-            return results
-
-        except Exception as e:
-            logger.error(f"Error getting products by category: {e}")
-            return []
-        finally:
-            if session:
-                self.db_manager.close_session(session)
-
-    def get_price_changes(self, days: int = 7) -> List[Dict[str, Any]]:
-        """
-        Get products with price changes in the last N days.
-
-        Args:
-            days: Number of days to look back
-
-        Returns:
-            List of dictionaries with price change information
-        """
-        session = None
-        try:
-            session = self.db_manager.get_session()
-            cutoff_date = datetime.utcnow() - timedelta(days=days)
-
-            # Complex query to find products with price changes
-            # This is a simplified version - in production you might want more sophisticated logic
-            query = session.query(Product, PriceHistory).join(PriceHistory).filter(
-                PriceHistory.scraped_at >= cutoff_date
-            ).order_by(Product.id, PriceHistory.scraped_at.desc())
-
-            results = []
-            current_product = None
-            prices = []
-
-            for product, price_history in query:
-                if current_product != product.id:
-                    if current_product is not None and len(prices) > 1:
-                        # Check for price changes
-                        latest_price = prices[0]
-                        previous_price = prices[1] if len(prices) > 1 else None
-
-                        if previous_price and (
-                            latest_price.regular_price != previous_price.regular_price or
-                            latest_price.sale_price != previous_price.sale_price
-                        ):
-                            results.append({
-                                'product': product,
-                                'latest_price': latest_price,
-                                'previous_price': previous_price
-                            })
-
-                    current_product = product.id
-                    prices = [price_history]
-                else:
-                    prices.append(price_history)
-
-            return results
-
-        except Exception as e:
-            logger.error(f"Error getting price changes: {e}")
-            return []
-        finally:
-            if session:
-                self.db_manager.close_session(session)
-
-    def get_discount_analysis(self, min_discount: float = 50.0) -> pd.DataFrame:
-        """
-        Get products with high discounts for analysis.
-
-        Args:
-            min_discount: Minimum discount percentage to include
-
-        Returns:
-            Pandas DataFrame with discount analysis data
-        """
-        session = None
-        try:
-            session = self.db_manager.get_session()
-
-            query = session.query(Product, PriceHistory).join(PriceHistory).filter(
-                PriceHistory.discount_percentage >= min_discount,
-                PriceHistory.is_active == True
-            ).order_by(PriceHistory.discount_percentage.desc())
-
-            data = []
-            for product, price_history in query:
-                data.append({
-                    'external_id': product.external_id,
-                    'name': product.name,
-                    'category': product.category,
-                    'brand': product.brand,
-                    'regular_price': price_history.regular_price,
-                    'sale_price': price_history.sale_price,
-                    'discount_percentage': price_history.discount_percentage,
-                    'scraped_at': price_history.scraped_at
-                })
-
-            return pd.DataFrame(data)
-
-        except Exception as e:
-            logger.error(f"Error getting discount analysis: {e}")
-            return pd.DataFrame()
-        finally:
-            if session:
-                self.db_manager.close_session(session)
-
-    def export_to_csv(self, filepath: str, category: Optional[str] = None) -> bool:
-        """
-        Export product data to CSV file.
-
-        Args:
-            filepath: Path to output CSV file
-            category: Optional category filter
-
-        Returns:
-            True if successful, False otherwise
-        """
-        try:
-            session = self.db_manager.get_session()
-
-            query = session.query(Product, PriceHistory).join(PriceHistory)
+            query = session.query(Product)
 
             if category:
                 query = query.filter(Product.category == category)
 
-            data = []
-            for product, price_history in query:
-                data.append({
-                    'external_id': product.external_id,
-                    'name': product.name,
-                    'category': product.category,
-                    'subcategory': product.subcategory,
-                    'brand': product.brand,
-                    'regular_price': price_history.regular_price,
-                    'sale_price': price_history.sale_price,
-                    'discount_percentage': price_history.discount_percentage,
-                    'currency': price_history.currency,
-                    'scraped_at': price_history.scraped_at,
-                    'image_url': product.image_url,
-                    'product_url': product.product_url if hasattr(product, 'product_url') else None
-                })
+            products = query.order_by(Product.scraped_at.desc()).limit(limit).all()
+            return products
 
-            df = pd.DataFrame(data)
-            df.to_csv(filepath, index=False)
-
-            logger.info(f"Exported {len(data)} products to {filepath}")
-            return True
-
-        except Exception as e:
-            logger.error(f"Error exporting to CSV: {e}")
-            return False
         finally:
-            if session:
-                self.db_manager.close_session(session)
+            session.close()
 
-    def get_database_stats(self) -> Dict[str, Any]:
-        """
-        Get database statistics.
-
-        Returns:
-            Dictionary with database statistics
-        """
-        session = None
+    def get_product_price_history(self, product_id: int) -> List[PriceHistory]:
+        """Get price history for a specific product"""
+        session = self.get_session()
         try:
-            session = self.db_manager.get_session()
-
-            stats = {
-                'total_products': session.query(Product).count(),
-                'total_price_records': session.query(PriceHistory).count(),
-                'total_scraping_sessions': session.query(ScrapingSession).count(),
-                'categories': session.query(Product.category).distinct().count(),
-                'latest_scrape': session.query(PriceHistory.scraped_at).order_by(PriceHistory.scraped_at.desc()).first()
-            }
-
-            return stats
-
-        except Exception as e:
-            logger.error(f"Error getting database stats: {e}")
-            return {}
+            history = session.query(PriceHistory).filter(
+                PriceHistory.product_id == product_id
+            ).order_by(PriceHistory.recorded_at.desc()).all()
+            return history
         finally:
-            if session:
-                self.db_manager.close_session(session)
+            session.close()
 
+    def log_scrape(self, log_data: Dict) -> Optional[ScrapeLog]:
+        """Log a scraping session"""
+        session = self.get_session()
+        try:
+            log_entry = ScrapeLog(**log_data)
+            session.add(log_entry)
+            session.commit()
+            session.refresh(log_entry)
+            return log_entry
+        except SQLAlchemyError as e:
+            session.rollback()
+            logger.error(f"Error logging scrape: {e}")
+            return None
+        finally:
+            session.close()
 
-# Convenience functions
-def initialize_database(database_url: str = None):
-    """
-    Initialize the database and create tables.
+    def store_anomaly(self, anomaly_data: Dict) -> Optional[AnomalyDetection]:
+        """Store an anomaly detection result"""
+        session = self.get_session()
+        try:
+            anomaly = AnomalyDetection(**anomaly_data)
+            session.add(anomaly)
+            session.commit()
+            session.refresh(anomaly)
+            return anomaly
+        except SQLAlchemyError as e:
+            session.rollback()
+            logger.error(f"Error storing anomaly: {e}")
+            return None
+        finally:
+            session.close()
 
-    Args:
-        database_url: Database connection URL
-    """
-    init_database(database_url)
+    def get_anomalies(self, confidence_threshold: float = 0.7, limit: int = 100) -> List[AnomalyDetection]:
+        """
+        Get detected anomalies
+        
+        Args:
+            confidence_threshold: Minimum confidence score
+            limit: Maximum number of anomalies to retrieve
+            
+        Returns:
+            List of AnomalyDetection instances
+        """
+        session = self.get_session()
+        try:
+            anomalies = session.query(AnomalyDetection).filter(
+                AnomalyDetection.confidence_score >= confidence_threshold,
+                AnomalyDetection.false_positive == False
+            ).order_by(
+                AnomalyDetection.confidence_score.desc()
+            ).limit(limit).all()
+            return anomalies
+        finally:
+            session.close()
 
+    def get_database_stats(self) -> Dict:
+        """Get database statistics"""
+        session = self.get_session()
+        try:
+            total_products = session.query(func.count(Product.id)).scalar()
+            total_price_history = session.query(func.count(PriceHistory.id)).scalar()
+            total_scrapes = session.query(func.count(ScrapeLog.id)).scalar()
+            total_anomalies = session.query(func.count(AnomalyDetection.id)).scalar()
 
-def create_data_storage(database_url: str = None) -> DataStorage:
-    """
-    Create a data storage instance.
-
-    Args:
-        database_url: Database connection URL
-
-    Returns:
-        DataStorage instance
-    """
-    return DataStorage(database_url)
+            return {
+                'total_products': total_products,
+                'total_price_history': total_price_history,
+                'total_scrapes': total_scrapes,
+                'total_anomalies': total_anomalies
+            }
+        finally:
+            session.close()

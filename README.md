@@ -1,8 +1,18 @@
-# Bilka Price Monitor - Simple POC Version
+# Bilka Price Monitor - Advanced Deal Detection System
 
-> **🖥️ Perfect for Company Laptops** - No Docker, ngrok, or external applications required!
+> **� Identifies Unnaturally Good Deals** - Advanced anomaly detection for Bilka.dk prices
 
-A lightweight web-based price monitoring application for BILKA.dk that runs entirely locally. Designed as a Proof of Concept with smart storage limits (~2000 records) for optimal performance.
+A sophisticated web-based price monitoring application for BILKA.dk with **enterprise-grade anomaly detection** specifically designed to identify suspicious deals, fake discounts, and pricing errors. Features 5 different detection algorithms, historical price tracking, and an interactive dashboard.
+
+## 🌟 Key Features
+
+- **🚨 Suspicious Deal Detection** - Identifies unnaturally good offers using multi-factor analysis
+- **🎭 Fake Discount Detection** - Spots inflated "original prices" and deceptive pricing
+- **📊 Statistical Analysis** - Z-score and IQR outlier detection
+- **📈 Historical Price Tracking** - Monitor price changes over time
+- **🎯 Deal Quality Scoring** - 0-100 score for each deal
+- **🖥️ Interactive Dashboard** - Streamlit-based UI with 4 specialized tabs
+- **⚡ Real-time Analysis** - Instant anomaly detection on scraped data
 
 ## 🚀 Quick Start - Simple POC Version
 
@@ -44,15 +54,51 @@ See [`POC_README.md`](POC_README.md) for complete documentation including:
 
 ---
 
+## 🎯 What Makes This Special?
+
+This tool goes beyond simple price monitoring. It uses **advanced algorithms** to identify deals that are "too good to be true":
+
+### Anomaly Detection Methods:
+
+1. **Statistical Outlier Detection** - Z-score analysis identifies discounts 2.5+ standard deviations above normal
+2. **IQR Method** - Robust statistical analysis using interquartile ranges
+3. **Fake Discount Detection** - Identifies artificially inflated "original prices"
+4. **Too-Good-To-Be-True Scoring** - Multi-factor analysis with confidence levels
+5. **Price Manipulation Detection** - Spots systematic pricing patterns and games
+
+### Real-World Example:
+
+```
+❌ FAKE DISCOUNT DETECTED
+
+Product: "Kitchen Mixer Pro"
+Claims: "50% OFF - Was 1999 DKK, Now 999 DKK"
+
+🚩 Red Flags:
+- Original price (1999) is suspiciously round
+- Discount is exactly 50%
+- Original is 2.1x category median price
+- Final price (999) is average for category
+- Pattern: current_price × 2 = "original_price"
+
+Verdict: The "original price" was likely never charged.
+This is a FAKE DISCOUNT to create false urgency.
+
+Confidence: 87% | Recommendation: ⚠️ Don't be fooled
+```
+
 ## 🚀 Features
 
-- **Advanced Web Scraping**: Selenium-based scraper with stealth capabilities
-- **Real-time Analysis**: Deep discount analysis and error detection algorithms
-- **Interactive Dashboard**: Streamlit-based UI for data visualization
-- **Data Persistence**: SQLite database with SQLAlchemy ORM
-- **Comprehensive Validation**: Multi-layered price validation and anomaly detection
-- **Export Capabilities**: CSV/Excel export functionality
-- **Docker Support**: Containerized deployment ready
+- **🔍 Advanced Web Scraping**: Selenium-based scraper with anti-detection measures
+- **🤖 5 Anomaly Detection Algorithms**: Statistical, IQR, fake discounts, TGTBT, manipulation
+- **📊 Interactive Dashboard**: 4 specialized tabs for different analyses
+- **💾 Historical Price Tracking**: Complete price history with trend analysis
+- **🎯 Suspicion Scoring**: 0-100 point system for flagging suspicious deals
+- **📈 Deal Quality Scoring**: Rate each deal from 0-100
+- **✅ Price Validation**: Multi-layered validation with error detection
+- **📁 Export Capabilities**: CSV export with filtering options
+- **🗄️ SQLite Database**: Efficient local storage with SQLAlchemy ORM
+- **🐳 Docker Support**: Containerized deployment ready
 
 ## 📋 Table of Contents
 

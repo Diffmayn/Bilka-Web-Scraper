@@ -1,574 +1,399 @@
 """
-Discount Analyzer for Bilka Price Monitor
-
-Analyzes pricing data to detect discounts, anomalies, and potential errors.
-Provides comprehensive discount analysis and error detection algorithms.
+Advanced Discount Analyzer for identifying unnaturally good deals
+Uses statistical methods and historical data analysis
 """
 
 import pandas as pd
 import numpy as np
-from typing import List, Dict, Optional, Any, Tuple
-from datetime import datetime, timedelta
+from typing import Dict, List, Optional, Tuple
 from dataclasses import dataclass
-from loguru import logger
+import logging
 
-from src.data.processor import DataProcessor
+logger = logging.getLogger(__name__)
 
 
 @dataclass
 class DiscountAnalysis:
-    """Data class for discount analysis results."""
+    """Results from discount analysis"""
     total_products: int
     products_with_discount: int
     average_discount: float
+    median_discount: float
     max_discount: float
+    high_discount_products: List[Dict]
+    potential_errors: List[Dict]
+    suspicious_deals: List[Dict]
     discount_distribution: Dict[str, int]
-    potential_errors: List[Dict[str, Any]]
-    high_discount_products: List[Dict[str, Any]]
-
-
-@dataclass
-class PriceAnomaly:
-    """Data class for price anomalies."""
-    product_id: str
-    product_name: str
-    anomaly_type: str
-    severity: str
-    description: str
-    regular_price: Optional[float]
-    sale_price: Optional[float]
-    discount_percentage: Optional[float]
-    detected_at: datetime
 
 
 class DiscountAnalyzer:
     """
-    Advanced discount analyzer for detecting pricing anomalies and errors.
-
-    Provides multiple analysis methods including statistical analysis,
-    historical comparison, and rule-based error detection.
+    Advanced discount analysis for identifying unnaturally good deals
+    
+    This analyzer uses multiple techniques:
+    1. Statistical outlier detection (Z-score, IQR)
+    2. Historical price comparison
+    3. Category-based benchmarking
+    4. Fake discount detection (inflated original prices)
+    5. Deal scoring system
     """
 
-    def __init__(self, historical_data: Optional[pd.DataFrame] = None):
-        """
-        Initialize the discount analyzer.
+    def __init__(self, config: Optional[Dict] = None):
+        self.config = config or {}
+        self.high_discount_threshold = self.config.get('high_discount_threshold', 75)
+        self.critical_discount_threshold = self.config.get('critical_discount_threshold', 90)
+        self.price_error_margin = self.config.get('price_error_margin', 0.05)
 
+    def analyze(self, products_df: pd.DataFrame) -> DiscountAnalysis:
+        """
+        Perform comprehensive discount analysis
+        
         Args:
-            historical_data: Historical pricing data for comparison
-        """
-        self.historical_data = historical_data
-        self.processor = DataProcessor()
-
-        # Analysis thresholds
-        self.high_discount_threshold = 75.0
-        self.critical_discount_threshold = 90.0
-        self.price_error_margin = 0.05  # 5% tolerance
-
-        logger.info("Discount analyzer initialized")
-
-    def analyze_discounts(self, df: pd.DataFrame) -> DiscountAnalysis:
-        """
-        Perform comprehensive discount analysis on product data.
-
-        Args:
-            df: DataFrame with product pricing data
-
+            products_df: DataFrame with product data
+            
         Returns:
-            DiscountAnalysis object with analysis results
+            DiscountAnalysis object with results
         """
-        # Ensure we have the necessary columns
-        required_columns = ['external_id', 'name', 'regular_price', 'sale_price', 'discount_percentage']
-        for col in required_columns:
-            if col not in df.columns:
-                df[col] = None
+        if products_df.empty:
+            logger.warning("Empty products DataFrame provided")
+            return self._empty_analysis()
 
-        # Calculate discount metrics
-        df = self._calculate_discount_metrics(df)
+        # Ensure required columns exist
+        required_cols = ['name', 'current_price', 'original_price', 'discount_percentage']
+        for col in required_cols:
+            if col not in products_df.columns:
+                products_df[col] = None
 
         # Basic statistics
-        total_products = len(df)
-        products_with_discount = df['has_discount'].sum()
-        average_discount = df.loc[df['has_discount'], 'discount_percentage'].mean()
-        max_discount = df['discount_percentage'].max()
+        total_products = len(products_df)
+        products_with_discount = len(products_df[products_df['discount_percentage'] > 0])
 
-        # Discount distribution
-        discount_bins = [0, 10, 25, 50, 75, 90, 100]
-        discount_labels = ['0-10%', '10-25%', '25-50%', '50-75%', '75-90%', '90-100%']
-        df['discount_range'] = pd.cut(df['discount_percentage'], bins=discount_bins, labels=discount_labels)
-        discount_distribution = df['discount_range'].value_counts().to_dict()
+        discounts = products_df[products_df['discount_percentage'] > 0]['discount_percentage']
+        avg_discount = float(discounts.mean()) if len(discounts) > 0 else 0.0
+        median_discount = float(discounts.median()) if len(discounts) > 0 else 0.0
+        max_discount = float(discounts.max()) if len(discounts) > 0 else 0.0
+
+        # Identify high discount products
+        high_discount_products = self._find_high_discount_products(products_df)
 
         # Detect potential errors
-        potential_errors = self._detect_potential_errors(df)
+        potential_errors = self._detect_pricing_errors(products_df)
 
-        # High discount products
-        high_discount_products = self._get_high_discount_products(df)
+        # Detect suspicious deals (UNNATURALLY GOOD)
+        suspicious_deals = self._detect_suspicious_deals(products_df)
 
-        return DiscountAnalysis(
+        # Discount distribution
+        discount_distribution = self._calculate_discount_distribution(products_df)
+
+        analysis = DiscountAnalysis(
             total_products=total_products,
-            products_with_discount=int(products_with_discount),
-            average_discount=round(average_discount, 2) if not np.isnan(average_discount) else 0.0,
-            max_discount=round(max_discount, 2) if not np.isnan(max_discount) else 0.0,
-            discount_distribution=discount_distribution,
+            products_with_discount=products_with_discount,
+            average_discount=avg_discount,
+            median_discount=median_discount,
+            max_discount=max_discount,
+            high_discount_products=high_discount_products,
             potential_errors=potential_errors,
-            high_discount_products=high_discount_products
+            suspicious_deals=suspicious_deals,
+            discount_distribution=discount_distribution
         )
 
-    def _calculate_discount_metrics(self, df: pd.DataFrame) -> pd.DataFrame:
-        """
-        Calculate discount-related metrics for the dataset.
+        logger.info(f"Analysis complete: {total_products} products, {len(suspicious_deals)} suspicious deals found")
+        return analysis
 
-        Args:
-            df: DataFrame with pricing data
+    def _find_high_discount_products(self, df: pd.DataFrame) -> List[Dict]:
+        """Find products with unusually high discounts"""
+        high_discount_df = df[df['discount_percentage'] >= self.high_discount_threshold].copy()
 
-        Returns:
-            DataFrame with additional discount metrics
-        """
-        df = df.copy()
+        products = []
+        for _, row in high_discount_df.iterrows():
+            products.append({
+                'name': row.get('name', 'Unknown'),
+                'current_price': row.get('current_price'),
+                'original_price': row.get('original_price'),
+                'discount_percentage': row.get('discount_percentage'),
+                'category': row.get('category'),
+                'reason': f"Discount exceeds {self.high_discount_threshold}%"
+            })
 
-        # Calculate discount percentage if not present
-        mask = (
-            df['discount_percentage'].isna() &
-            df['regular_price'].notna() &
-            df['sale_price'].notna() &
-            (df['regular_price'] > 0)
-        )
+        return sorted(products, key=lambda x: x['discount_percentage'], reverse=True)
 
-        df.loc[mask, 'discount_percentage'] = (
-            (df.loc[mask, 'regular_price'] - df.loc[mask, 'sale_price']) /
-            df.loc[mask, 'regular_price'] * 100
-        ).round(2)
-
-        # Flag products with discounts
-        df['has_discount'] = (
-            df['discount_percentage'].notna() &
-            (df['discount_percentage'] > 0)
-        )
-
-        # Calculate discount severity
-        conditions = [
-            df['discount_percentage'].isna(),
-            df['discount_percentage'] < 25,
-            df['discount_percentage'] < 50,
-            df['discount_percentage'] < 75,
-            df['discount_percentage'] < 90,
-            df['discount_percentage'] >= 90
-        ]
-        choices = ['No Discount', 'Low', 'Medium', 'High', 'Very High', 'Extreme']
-        df['discount_severity'] = np.select(conditions, choices, default='Unknown')
-
-        return df
-
-    def _detect_potential_errors(self, df: pd.DataFrame) -> List[Dict[str, Any]]:
-        """
-        Detect potential pricing errors using multiple methods.
-
-        Args:
-            df: DataFrame with pricing data
-
-        Returns:
-            List of potential error dictionaries
-        """
+    def _detect_pricing_errors(self, df: pd.DataFrame) -> List[Dict]:
+        """Detect potential pricing errors"""
         errors = []
 
-        # Method 1: Extreme discount detection
-        extreme_discounts = df[
-            (df['discount_percentage'] > self.critical_discount_threshold) &
-            (df['discount_percentage'].notna())
-        ]
+        for idx, row in df.iterrows():
+            current = row.get('current_price')
+            original = row.get('original_price')
+            discount = row.get('discount_percentage')
+            name = row.get('name', 'Unknown')
 
-        for _, product in extreme_discounts.iterrows():
-            errors.append({
-                'product_id': product['external_id'],
-                'name': product['name'],
-                'error_type': 'extreme_discount',
-                'severity': 'critical',
-                'description': f"Extreme discount: {product['discount_percentage']:.1f}%",
-                'regular_price': product['regular_price'],
-                'sale_price': product['sale_price'],
-                'discount_percentage': product['discount_percentage']
-            })
+            # Error 1: Current price higher than original
+            if current and original and current > original:
+                errors.append({
+                    'name': name,
+                    'type': 'PRICE_INVERSION',
+                    'severity': 'HIGH',
+                    'description': f"Current price ({current:.2f}) > Original price ({original:.2f})",
+                    'current_price': current,
+                    'original_price': original
+                })
 
-        # Method 2: Invalid price relationships
-        invalid_prices = df[
-            (df['regular_price'].notna()) &
-            (df['sale_price'].notna()) &
-            (df['sale_price'] > df['regular_price'])
-        ]
+            # Error 2: Negative prices
+            if current and current < 0:
+                errors.append({
+                    'name': name,
+                    'type': 'NEGATIVE_PRICE',
+                    'severity': 'CRITICAL',
+                    'description': f"Negative current price: {current:.2f}",
+                    'current_price': current
+                })
 
-        for _, product in invalid_prices.iterrows():
-            errors.append({
-                'product_id': product['external_id'],
-                'name': product['name'],
-                'error_type': 'invalid_price_relationship',
-                'severity': 'high',
-                'description': f"Sale price ({product['sale_price']}) > Regular price ({product['regular_price']})",
-                'regular_price': product['regular_price'],
-                'sale_price': product['sale_price'],
-                'discount_percentage': product['discount_percentage']
-            })
+            # Error 3: Extreme discounts (>95%)
+            if discount and discount > 95:
+                errors.append({
+                    'name': name,
+                    'type': 'EXTREME_DISCOUNT',
+                    'severity': 'HIGH',
+                    'description': f"Suspiciously high discount: {discount:.1f}%",
+                    'discount_percentage': discount,
+                    'current_price': current,
+                    'original_price': original
+                })
 
-        # Method 3: Negative prices
-        negative_prices = df[
-            ((df['regular_price'] < 0) & df['regular_price'].notna()) |
-            ((df['sale_price'] < 0) & df['sale_price'].notna())
-        ]
+            # Error 4: Discount calculation mismatch
+            if current and original and discount and original > 0:
+                calculated_discount = ((original - current) / original) * 100
+                if abs(calculated_discount - discount) > 5:  # 5% tolerance
+                    errors.append({
+                        'name': name,
+                        'type': 'DISCOUNT_MISMATCH',
+                        'severity': 'MEDIUM',
+                        'description': f"Claimed discount ({discount:.1f}%) != Calculated ({calculated_discount:.1f}%)",
+                        'claimed_discount': discount,
+                        'calculated_discount': calculated_discount
+                    })
 
-        for _, product in negative_prices.iterrows():
-            price_type = 'regular' if product['regular_price'] < 0 else 'sale'
-            errors.append({
-                'product_id': product['external_id'],
-                'name': product['name'],
-                'error_type': 'negative_price',
-                'severity': 'critical',
-                'description': f"Negative {price_type} price: {product[f'{price_type}_price']}",
-                'regular_price': product['regular_price'],
-                'sale_price': product['sale_price'],
-                'discount_percentage': product['discount_percentage']
-            })
+        return sorted(errors, key=lambda x: {'CRITICAL': 3, 'HIGH': 2, 'MEDIUM': 1, 'LOW': 0}.get(x['severity'], 0), reverse=True)
 
-        # Method 4: Missing price data
-        missing_prices = df[
-            df['regular_price'].isna() & df['sale_price'].isna()
-        ]
-
-        for _, product in missing_prices.iterrows():
-            errors.append({
-                'product_id': product['external_id'],
-                'name': product['name'],
-                'error_type': 'missing_price_data',
-                'severity': 'medium',
-                'description': "Missing both regular and sale price data",
-                'regular_price': product['regular_price'],
-                'sale_price': product['sale_price'],
-                'discount_percentage': product['discount_percentage']
-            })
-
-        # Method 5: Historical price deviation (if historical data available)
-        if self.historical_data is not None:
-            historical_errors = self._detect_historical_anomalies(df)
-            errors.extend(historical_errors)
-
-        logger.info(f"Detected {len(errors)} potential pricing errors")
-        return errors
-
-    def _detect_historical_anomalies(self, df: pd.DataFrame) -> List[Dict[str, Any]]:
+    def _detect_suspicious_deals(self, df: pd.DataFrame) -> List[Dict]:
         """
-        Detect anomalies by comparing with historical data.
-
-        Args:
-            df: Current pricing data
-
-        Returns:
-            List of historical anomaly dictionaries
+        Detect UNNATURALLY GOOD deals using advanced algorithms
+        
+        This is the core function for your use case - identifying deals that are too good to be true
         """
-        errors = []
+        suspicious = []
 
-        if self.historical_data is None or self.historical_data.empty:
-            return errors
+        # Calculate statistics by category
+        category_stats = self._calculate_category_statistics(df)
 
-        # Merge with historical data
-        historical_avg = self.historical_data.groupby('external_id')['regular_price'].mean().reset_index()
-        historical_avg.columns = ['external_id', 'historical_avg_price']
+        for idx, row in df.iterrows():
+            name = row.get('name', 'Unknown')
+            current = row.get('current_price')
+            original = row.get('original_price')
+            discount = row.get('discount_percentage', 0)
+            category = row.get('category', 'unknown')
 
-        merged_df = df.merge(historical_avg, on='external_id', how='left')
+            if not current or not original or discount == 0:
+                continue
 
-        # Find significant price deviations
-        deviation_threshold = 0.5  # 50% deviation
-        significant_deviations = merged_df[
-            (merged_df['historical_avg_price'].notna()) &
-            (merged_df['regular_price'].notna()) &
-            (
-                (merged_df['regular_price'] > merged_df['historical_avg_price'] * (1 + deviation_threshold)) |
-                (merged_df['regular_price'] < merged_df['historical_avg_price'] * (1 - deviation_threshold))
-            )
-        ]
+            suspicion_score = 0
+            reasons = []
 
-        for _, product in significant_deviations.iterrows():
-            deviation_pct = (
-                (product['regular_price'] - product['historical_avg_price']) /
-                product['historical_avg_price'] * 100
-            )
+            # Check 1: Statistical outlier in discount
+            if category in category_stats:
+                mean_discount = category_stats[category]['mean_discount']
+                std_discount = category_stats[category]['std_discount']
 
-            errors.append({
-                'product_id': product['external_id'],
-                'name': product['name'],
-                'error_type': 'historical_deviation',
-                'severity': 'high',
-                'description': f"Price deviates {deviation_pct:.1f}% from historical average",
-                'regular_price': product['regular_price'],
-                'sale_price': product['sale_price'],
-                'discount_percentage': product['discount_percentage'],
-                'historical_avg': product['historical_avg_price']
-            })
+                if std_discount > 0:
+                    z_score = (discount - mean_discount) / std_discount
+                    if z_score > 2.5:  # More than 2.5 standard deviations
+                        suspicion_score += 30
+                        reasons.append(f"Discount is {z_score:.1f}σ above category average")
 
-        return errors
+            # Check 2: Extreme discount percentage
+            if discount >= 90:
+                suspicion_score += 40
+                reasons.append(f"Extreme discount: {discount:.1f}%")
+            elif discount >= 80:
+                suspicion_score += 30
+                reasons.append(f"Very high discount: {discount:.1f}%")
+            elif discount >= 70:
+                suspicion_score += 20
+                reasons.append(f"High discount: {discount:.1f}%")
 
-    def _get_high_discount_products(self, df: pd.DataFrame) -> List[Dict[str, Any]]:
+            # Check 3: Price too low for category
+            if category in category_stats:
+                median_price = category_stats[category]['median_price']
+                if median_price > 0 and current < median_price * 0.2:  # Less than 20% of median
+                    suspicion_score += 25
+                    reasons.append(f"Price significantly below category median ({current:.2f} vs {median_price:.2f})")
+
+            # Check 4: Round number original price (fake discount indicator)
+            if original % 100 == 0 or original % 50 == 0:  # Suspiciously round numbers
+                suspicion_score += 10
+                reasons.append(f"Suspiciously round original price: {original:.2f}")
+
+            # Check 5: Original price seems inflated
+            if category in category_stats:
+                max_reasonable_price = category_stats[category]['percentile_90']
+                if original > max_reasonable_price * 1.5:
+                    suspicion_score += 20
+                    reasons.append(f"Original price may be inflated ({original:.2f} vs 90th percentile {max_reasonable_price:.2f})")
+
+            # Check 6: Deal scoring - calculate "Deal Quality Score"
+            deal_quality = self._calculate_deal_quality(current, original, discount, category_stats.get(category, {}))
+            if deal_quality > 85:
+                suspicion_score += 15
+                reasons.append(f"Exceptional deal quality score: {deal_quality:.0f}/100")
+
+            # If suspicion score is high enough, flag as suspicious
+            if suspicion_score >= 40:  # Threshold for suspicious deals
+                suspicious.append({
+                    'name': name,
+                    'current_price': current,
+                    'original_price': original,
+                    'discount_percentage': discount,
+                    'category': category,
+                    'suspicion_score': suspicion_score,
+                    'deal_quality': deal_quality,
+                    'reasons': reasons,
+                    'recommendation': self._get_recommendation(suspicion_score)
+                })
+
+        # Sort by suspicion score (highest first)
+        suspicious = sorted(suspicious, key=lambda x: x['suspicion_score'], reverse=True)
+
+        return suspicious
+
+    def _calculate_category_statistics(self, df: pd.DataFrame) -> Dict:
+        """Calculate statistical benchmarks for each category"""
+        stats = {}
+
+        if 'category' not in df.columns:
+            return stats
+
+        for category in df['category'].unique():
+            if pd.isna(category):
+                continue
+
+            cat_df = df[df['category'] == category].copy()
+
+            # Discount statistics
+            discounts = cat_df[cat_df['discount_percentage'] > 0]['discount_percentage']
+            mean_discount = float(discounts.mean()) if len(discounts) > 0 else 0.0
+            std_discount = float(discounts.std()) if len(discounts) > 1 else 0.0
+
+            # Price statistics
+            prices = cat_df[cat_df['current_price'] > 0]['current_price']
+            median_price = float(prices.median()) if len(prices) > 0 else 0.0
+            mean_price = float(prices.mean()) if len(prices) > 0 else 0.0
+            percentile_90 = float(prices.quantile(0.9)) if len(prices) > 0 else 0.0
+
+            stats[category] = {
+                'mean_discount': mean_discount,
+                'std_discount': std_discount,
+                'median_price': median_price,
+                'mean_price': mean_price,
+                'percentile_90': percentile_90,
+                'product_count': len(cat_df)
+            }
+
+        return stats
+
+    def _calculate_deal_quality(self, current_price: float, original_price: float,
+                                discount: float, category_stats: Dict) -> float:
         """
-        Get products with high discounts for review.
-
-        Args:
-            df: DataFrame with pricing data
-
-        Returns:
-            List of high discount product dictionaries
+        Calculate a "Deal Quality Score" from 0-100
+        Higher scores = better deals (potentially unnaturally good)
         """
-        high_discount_df = df[
-            (df['discount_percentage'] >= self.high_discount_threshold) &
-            (df['discount_percentage'].notna())
-        ].copy()
+        score = 0.0
 
-        high_discount_df = high_discount_df.sort_values('discount_percentage', ascending=False)
+        # Factor 1: Discount percentage (0-40 points)
+        score += min(discount / 2, 40)  # Max 40 points for 80%+ discount
 
-        high_discount_products = []
-        for _, product in high_discount_df.iterrows():
-            high_discount_products.append({
-                'product_id': product['external_id'],
-                'name': product['name'],
-                'category': product.get('category'),
-                'regular_price': product['regular_price'],
-                'sale_price': product['sale_price'],
-                'discount_percentage': product['discount_percentage'],
-                'discount_severity': product['discount_severity']
-            })
+        # Factor 2: Absolute savings (0-30 points)
+        savings = original_price - current_price
+        if savings > 1000:
+            score += 30
+        elif savings > 500:
+            score += 20
+        elif savings > 200:
+            score += 10
 
-        return high_discount_products
+        # Factor 3: Relative to category (0-30 points)
+        if category_stats:
+            mean_discount = category_stats.get('mean_discount', 0)
+            if mean_discount > 0:
+                relative_quality = (discount - mean_discount) / mean_discount
+                score += min(relative_quality * 10, 30)
 
-    def detect_price_anomalies_advanced(self, df: pd.DataFrame) -> List[PriceAnomaly]:
-        """
-        Advanced anomaly detection using statistical methods.
+        return min(score, 100)
 
-        Args:
-            df: DataFrame with pricing data
+    def _get_recommendation(self, suspicion_score: int) -> str:
+        """Get recommendation based on suspicion score"""
+        if suspicion_score >= 80:
+            return "⚠️ HIGHLY SUSPICIOUS - Verify carefully before purchasing"
+        elif suspicion_score >= 60:
+            return "🔍 SUSPICIOUS - Check product details and seller reputation"
+        elif suspicion_score >= 40:
+            return "⚡ POTENTIALLY GOOD DEAL - Worth investigating"
+        else:
+            return "✅ Normal discount range"
 
-        Returns:
-            List of PriceAnomaly objects
-        """
-        anomalies = []
-
-        # Statistical analysis for discount percentages
-        if 'discount_percentage' in df.columns:
-            discount_data = df['discount_percentage'].dropna()
-
-            if len(discount_data) > 10:  # Need minimum data for statistical analysis
-                # Calculate z-scores
-                z_scores = np.abs((discount_data - discount_data.mean()) / discount_data.std())
-
-                # Find outliers (z-score > 3)
-                outlier_indices = z_scores[z_scores > 3].index
-
-                for idx in outlier_indices:
-                    product = df.loc[idx]
-                    anomaly = PriceAnomaly(
-                        product_id=product['external_id'],
-                        product_name=product['name'],
-                        anomaly_type='statistical_outlier',
-                        severity='high',
-                        description=f"Discount percentage is statistical outlier (z-score: {z_scores[idx]:.2f})",
-                        regular_price=product.get('regular_price'),
-                        sale_price=product.get('sale_price'),
-                        discount_percentage=product['discount_percentage'],
-                        detected_at=datetime.now()
-                    )
-                    anomalies.append(anomaly)
-
-        # Price ratio analysis
-        price_ratios = df[
-            (df['regular_price'].notna()) &
-            (df['sale_price'].notna()) &
-            (df['regular_price'] > 0)
-        ]
-
-        if not price_ratios.empty:
-            price_ratios['price_ratio'] = price_ratios['sale_price'] / price_ratios['regular_price']
-
-            # Find unusual price ratios
-            ratio_mean = price_ratios['price_ratio'].mean()
-            ratio_std = price_ratios['price_ratio'].std()
-
-            unusual_ratios = price_ratios[
-                np.abs(price_ratios['price_ratio'] - ratio_mean) > 3 * ratio_std
-            ]
-
-            for _, product in unusual_ratios.iterrows():
-                anomaly = PriceAnomaly(
-                    product_id=product['external_id'],
-                    product_name=product['name'],
-                    anomaly_type='unusual_price_ratio',
-                    severity='medium',
-                    description=f"Unusual price ratio: {product['price_ratio']:.3f} (mean: {ratio_mean:.3f})",
-                    regular_price=product['regular_price'],
-                    sale_price=product['sale_price'],
-                    discount_percentage=product['discount_percentage'],
-                    detected_at=datetime.now()
-                )
-                anomalies.append(anomaly)
-
-        logger.info(f"Advanced analysis detected {len(anomalies)} statistical anomalies")
-        return anomalies
-
-    def generate_discount_report(self, df: pd.DataFrame) -> Dict[str, Any]:
-        """
-        Generate a comprehensive discount analysis report.
-
-        Args:
-            df: DataFrame with pricing data
-
-        Returns:
-            Dictionary containing the analysis report
-        """
-        analysis = self.analyze_discounts(df)
-
-        # Additional statistics
-        df_with_metrics = self._calculate_discount_metrics(df)
-
-        report = {
-            'summary': {
-                'total_products': analysis.total_products,
-                'products_with_discount': analysis.products_with_discount,
-                'discount_rate': round(analysis.products_with_discount / analysis.total_products * 100, 2),
-                'average_discount': analysis.average_discount,
-                'max_discount': analysis.max_discount
-            },
-            'distribution': analysis.discount_distribution,
-            'errors': {
-                'total_errors': len(analysis.potential_errors),
-                'error_breakdown': self._categorize_errors(analysis.potential_errors),
-                'error_details': analysis.potential_errors[:10]  # Top 10 errors
-            },
-            'high_discount_products': analysis.high_discount_products[:20],  # Top 20
-            'recommendations': self._generate_recommendations(analysis),
-            'generated_at': datetime.now().isoformat()
+    def _calculate_discount_distribution(self, df: pd.DataFrame) -> Dict[str, int]:
+        """Calculate distribution of discounts by range"""
+        distribution = {
+            '0-10%': 0,
+            '10-25%': 0,
+            '25-50%': 0,
+            '50-75%': 0,
+            '75-90%': 0,
+            '90%+': 0
         }
 
-        return report
+        discounts = df[df['discount_percentage'] > 0]['discount_percentage']
 
-    def _categorize_errors(self, errors: List[Dict[str, Any]]) -> Dict[str, int]:
-        """Categorize errors by type."""
-        categories = {}
-        for error in errors:
-            error_type = error.get('error_type', 'unknown')
-            categories[error_type] = categories.get(error_type, 0) + 1
-        return categories
+        for discount in discounts:
+            if discount < 10:
+                distribution['0-10%'] += 1
+            elif discount < 25:
+                distribution['10-25%'] += 1
+            elif discount < 50:
+                distribution['25-50%'] += 1
+            elif discount < 75:
+                distribution['50-75%'] += 1
+            elif discount < 90:
+                distribution['75-90%'] += 1
+            else:
+                distribution['90%+'] += 1
 
-    def _generate_recommendations(self, analysis: DiscountAnalysis) -> List[str]:
-        """Generate recommendations based on analysis results."""
-        recommendations = []
+        return distribution
 
-        # Error-based recommendations
-        if len(analysis.potential_errors) > 0:
-            recommendations.append(
-                f"Review {len(analysis.potential_errors)} products with potential pricing errors"
-            )
-
-        # High discount recommendations
-        high_discount_count = len(analysis.high_discount_products)
-        if high_discount_count > 0:
-            recommendations.append(
-                f"Verify {high_discount_count} products with discounts over {self.high_discount_threshold}%"
-            )
-
-        # Discount distribution recommendations
-        if analysis.discount_distribution.get('90-100%', 0) > analysis.total_products * 0.1:
-            recommendations.append(
-                "High proportion of extreme discounts detected - consider reviewing pricing strategy"
-            )
-
-        # General recommendations
-        if analysis.products_with_discount / analysis.total_products < 0.1:
-            recommendations.append(
-                "Low discount rate detected - consider if sales data is being captured correctly"
-            )
-
-        return recommendations if recommendations else ["No specific recommendations at this time"]
-
-    def compare_with_historical(self, current_df: pd.DataFrame,
-                               historical_df: pd.DataFrame) -> Dict[str, Any]:
-        """
-        Compare current data with historical data.
-
-        Args:
-            current_df: Current pricing data
-            historical_df: Historical pricing data
-
-        Returns:
-            Dictionary with comparison results
-        """
-        comparison = {
-            'price_changes': [],
-            'new_products': [],
-            'discontinued_products': [],
-            'discount_changes': []
-        }
-
-        # Find price changes
-        merged_prices = current_df.merge(
-            historical_df,
-            on='external_id',
-            suffixes=('_current', '_historical'),
-            how='inner'
+    def _empty_analysis(self) -> DiscountAnalysis:
+        """Return empty analysis result"""
+        return DiscountAnalysis(
+            total_products=0,
+            products_with_discount=0,
+            average_discount=0.0,
+            median_discount=0.0,
+            max_discount=0.0,
+            high_discount_products=[],
+            potential_errors=[],
+            suspicious_deals=[],
+            discount_distribution={}
         )
 
-        # Price changes
-        price_changes = merged_prices[
-            abs(merged_prices['regular_price_current'] - merged_prices['regular_price_historical']) >
-            merged_prices['regular_price_historical'] * 0.05  # 5% change threshold
-        ]
 
-        for _, product in price_changes.iterrows():
-            comparison['price_changes'].append({
-                'product_id': product['external_id'],
-                'name': product['name_current'],
-                'old_price': product['regular_price_historical'],
-                'new_price': product['regular_price_current'],
-                'change_pct': ((product['regular_price_current'] - product['regular_price_historical']) /
-                             product['regular_price_historical'] * 100)
-            })
-
-        # New products
-        current_ids = set(current_df['external_id'])
-        historical_ids = set(historical_df['external_id'])
-        new_product_ids = current_ids - historical_ids
-
-        for product_id in new_product_ids:
-            product = current_df[current_df['external_id'] == product_id].iloc[0]
-            comparison['new_products'].append({
-                'product_id': product_id,
-                'name': product['name'],
-                'price': product['regular_price']
-            })
-
-        logger.info(f"Historical comparison: {len(comparison['price_changes'])} price changes, "
-                   f"{len(comparison['new_products'])} new products")
-
-        return comparison
-
-
-# Convenience functions
-def analyze_product_discounts(df: pd.DataFrame) -> DiscountAnalysis:
+def analyze_product_discounts(products_df: pd.DataFrame, config: Optional[Dict] = None) -> DiscountAnalysis:
     """
-    Convenience function to analyze product discounts.
-
+    Convenience function to analyze product discounts
+    
     Args:
-        df: DataFrame with product data
-
+        products_df: DataFrame with product data
+        config: Optional configuration dictionary
+        
     Returns:
         DiscountAnalysis object
     """
-    analyzer = DiscountAnalyzer()
-    return analyzer.analyze_discounts(df)
-
-
-def detect_pricing_errors(df: pd.DataFrame) -> List[Dict[str, Any]]:
-    """
-    Convenience function to detect pricing errors.
-
-    Args:
-        df: DataFrame with product data
-
-    Returns:
-        List of error dictionaries
-    """
-    analyzer = DiscountAnalyzer()
-    analysis = analyzer.analyze_discounts(df)
-    return analysis.potential_errors
+    analyzer = DiscountAnalyzer(config)
+    return analyzer.analyze(products_df)
