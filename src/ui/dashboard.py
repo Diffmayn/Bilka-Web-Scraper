@@ -155,15 +155,25 @@ def scrape_products(category: str, max_products: int, storage: DataStorage):
             st.info(f"🔄 Starting scrape...")
             with debug_expander:
                 st.text("Calling scraper.scrape_category()...")
+                st.text(f"Category: {category}, Max: {max_products}")
             
-            products = scraper.scrape_category(category, max_products)
-            
-            with debug_expander:
-                st.text(f"Scraper returned {len(products)} products")
-                if len(products) > 0:
-                    st.text(f"First product: {products[0].get('name', 'NO NAME')[:50]}")
-                else:
-                    st.text("⚠️ No products returned from scraper!")
+            try:
+                products = scraper.scrape_category(category, max_products)
+                
+                with debug_expander:
+                    st.text(f"Scraper returned {len(products)} products")
+                    if len(products) > 0:
+                        st.text(f"First product: {products[0].get('name', 'NO NAME')[:50]}")
+                    else:
+                        st.text("⚠️ No products returned from scraper!")
+                        st.text("This usually means ChromeDriver didn't start properly")
+                        st.text("Try running: python test_scraper_from_dashboard.py")
+            except Exception as scrape_error:
+                with debug_expander:
+                    st.text(f"❌ Scrape exception: {scrape_error}")
+                    import traceback
+                    st.text(traceback.format_exc())
+                products = []
 
             if products:
                 # Store in database
@@ -192,9 +202,29 @@ def scrape_products(category: str, max_products: int, storage: DataStorage):
                 st.error("Please check the '🔍 Debug Logs' section above for details")
                 
                 # Additional troubleshooting info
+                st.warning("""
+                **⚠️ ChromeDriver/Streamlit Compatibility Issue**
+                
+                The scraper works from command line but fails in Streamlit.
+                This is a known issue with Selenium in Streamlit's execution model.
+                """)
+                
                 st.info("""
-                **Possible causes:**
-                1. ChromeDriver not available on Streamlit Cloud
+                **✅ WORKAROUND - Use Command Line:**
+                
+                1. Open PowerShell in project folder
+                2. Run: `python main.py --category electronics --max-products 50`
+                3. Return to this dashboard to view results
+                
+                Or use the test script:
+                ```
+                python test_scraper_from_dashboard.py
+                ```
+                """)
+                
+                st.info("""
+                **Other possible causes:**
+                1. ChromeDriver not starting properly in Streamlit context
                 2. Bilka.dk changed their HTML structure
                 3. Cookie consent blocking page load
                 4. CSS selectors are incorrect

@@ -22,19 +22,19 @@ def clean_product_data(product: Dict) -> Dict:
     cleaned = {}
 
     # Clean name
-    name = product.get('name', '').strip()
+    name = product.get('name') or ''
     if name:
-        cleaned['name'] = name[:500]  # Truncate to max length
+        cleaned['name'] = str(name).strip()[:500]  # Truncate to max length
 
     # Clean brand
-    brand = product.get('brand', '').strip()
+    brand = product.get('brand') or ''
     if brand:
-        cleaned['brand'] = brand[:255]
+        cleaned['brand'] = str(brand).strip()[:255]
 
     # Clean category
-    category = product.get('category', '').strip()
+    category = product.get('category') or ''
     if category:
-        cleaned['category'] = category[:100]
+        cleaned['category'] = str(category).strip()[:100]
 
     # Clean prices
     current_price = product.get('current_price')
@@ -51,23 +51,23 @@ def clean_product_data(product: Dict) -> Dict:
         cleaned['discount_percentage'] = round(float(discount), 2)
 
     # Clean URLs
-    url = product.get('url', '').strip()
+    url = product.get('url') or ''
     if url:
-        cleaned['url'] = url
+        cleaned['url'] = str(url).strip()
 
-    image_url = product.get('image_url', '').strip()
+    image_url = product.get('image_url') or ''
     if image_url:
-        cleaned['image_url'] = image_url
+        cleaned['image_url'] = str(image_url).strip()
 
     # Clean availability
-    availability = product.get('availability', '').strip()
+    availability = product.get('availability') or ''
     if availability:
-        cleaned['availability'] = availability[:100]
+        cleaned['availability'] = str(availability).strip()[:100]
 
     # Clean description
-    description = product.get('description', '').strip()
+    description = product.get('description') or ''
     if description:
-        cleaned['description'] = description
+        cleaned['description'] = str(description).strip()
 
     # Add scraped timestamp
     cleaned['scraped_at'] = product.get('scraped_at', datetime.utcnow())
