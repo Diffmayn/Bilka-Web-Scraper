@@ -19,39 +19,54 @@ class ProductParser:
     def _default_selectors(self) -> Dict:
         """Default CSS selectors for Bilka.dk"""
         return {
-            'product_container': '.product-card',
+            'product_container': 'a.product-card',
             'product_name': '.v-card__title',
-            'price_regular': '.after-price',
-            'price_sale': '.price-sale',
-            'discount_badge': '.discount-percentage',
-            'product_image': '.product-image img',
-            'product_url': '.product-card',
-            'availability': '.stock-status',
+            'product_description': '.description-text',
+            'price_before': '.before-price .amount',
+            'price_current': '.price-text .amount',
+            'discount_badge': '.sticker__promotionSaving',
+            'product_image': '.v-image__image',
+            'product_url': 'a.product-card',
+            'availability': '.text-right',
+            'store_stock': '.store-stock',
             'brand': '.product-brand',
         }
 
     def parse_price(self, price_text: str) -> Optional[float]:
-        """Extract numeric price from text"""
+        """Extract numeric price from text (handles Danish format like '7.499,-')"""
         if not price_text:
             return None
 
         try:
-            # Remove currency symbols and extract numbers
-            price_match = re.search(r'(\d+[,.]?\d{0,2})', price_text.replace(' ', ''))
+            # Remove common text like "Før", "Plus evt. fragt", "kr", "DKK", etc.
+            price_text = price_text.replace('Før', '').replace('Plus evt. fragt', '')
+            price_text = price_text.replace('kr', '').replace('DKK', '').replace(',-', '')
+            price_text = price_text.strip()
+            
+            # Danish format uses dot as thousand separator: 7.499 = 7499
+            # Remove dots used as thousand separators
+            price_text = price_text.replace('.', '')
+            
+            # Handle comma as decimal separator (7,50 = 7.50)
+            price_text = price_text.replace(',', '.')
+            
+            # Extract just the numbers
+            price_match = re.search(r'(\d+\.?\d{0,2})', price_text)
             if price_match:
-                price_str = price_match.group(1).replace(',', '.')
-                return float(price_str)
+                return float(price_match.group(1))
         except (ValueError, AttributeError) as e:
             logger.warning(f"Failed to parse price '{price_text}': {e}")
 
         return None
 
     def parse_discount(self, discount_text: str) -> Optional[float]:
-        """Extract discount percentage from text"""
+        """Extract discount percentage from text (handles 'Spar 40%' format)"""
         if not discount_text:
             return None
 
         try:
+            # Handle Danish "Spar X%" format or just "X%"
+            discount_text = discount_text.replace('Spar', '').replace('spar', '').strip()
             discount_match = re.search(r'(-?\d+)%?', discount_text)
             if discount_match:
                 return abs(float(discount_match.group(1)))
@@ -70,41 +85,63 @@ class ProductParser:
             if not name:
                 return None
 
-            # Extract prices
-            price_regular_elem = element.select_one(self.selectors['price_regular'])
-            price_sale_elem = element.select_one(self.selectors['price_sale'])
+            # Extract prices - Bilka shows "Før X,-" (before) and current price
+            price_before_elem = element.select_one(self.selectors['price_before'])
+            price_current_elem = element.select_one(self.selectors['price_current'])
 
-            regular_price = self.parse_price(
-                price_regular_elem.get_text(strip=True) if price_regular_elem else None
-            )
-            sale_price = self.parse_price(
-                price_sale_elem.get_text(strip=True) if price_sale_elem else None
-            )
+            # Parse before price (original price)
+            original_price = None
+            if price_before_elem:
+                original_price = self.parse_price(price_before_elem.get_text(strip=True))
 
-            # Current price is sale price if available, otherwise regular price
-            current_price = sale_price if sale_price else regular_price
-            original_price = regular_price if sale_price else None
+            # Parse current price
+            current_price = None
+            if price_current_elem:
+                current_price = self.parse_price(price_current_elem.get_text(strip=True))
+            
+            # If no current price found but we have original price, current = original (no discount)
+            if not current_price and original_price:
+                current_price = original_price
+                original_price = None
 
-            # Extract discount
+            # Extract discount from badge
             discount_elem = element.select_one(self.selectors['discount_badge'])
             discount_percentage = None
             if discount_elem:
-                discount_percentage = self.parse_discount(discount_elem.get_text(strip=True))
-            elif sale_price and regular_price and regular_price > 0:
+                # Extract text like "Spar 40%"
+                discount_text = discount_elem.get_text(strip=True)
+                discount_percentage = self.parse_discount(discount_text)
+            elif current_price and original_price and original_price > 0:
                 # Calculate discount if not explicitly shown
-                discount_percentage = ((regular_price - sale_price) / regular_price) * 100
+                discount_percentage = ((original_price - current_price) / original_price) * 100
 
-            # Extract URL
-            url_elem = element.select_one(self.selectors['product_url'])
-            url = url_elem.get('href') if url_elem and url_elem.has_attr('href') else None
+            # Extract URL - the element itself is an <a> tag
+            url = element.get('href') if element.has_attr('href') else None
+            if url and not url.startswith('http'):
+                url = f"https://www.bilka.dk{url}"
 
             # Extract image
             image_elem = element.select_one(self.selectors['product_image'])
-            image_url = image_elem.get('src') if image_elem and image_elem.has_attr('src') else None
+            image_url = None
+            if image_elem:
+                # Check for style background-image or src
+                if image_elem.has_attr('style'):
+                    style = image_elem.get('style', '')
+                    import re
+                    match = re.search(r'url\(["\']?([^"\']+)["\']?\)', style)
+                    if match:
+                        image_url = match.group(1)
+                elif image_elem.name == 'img' and image_elem.has_attr('src'):
+                    image_url = image_elem.get('src')
 
-            # Extract brand
+            # Extract brand (may not always be present)
             brand_elem = element.select_one(self.selectors['brand'])
             brand = brand_elem.get_text(strip=True) if brand_elem else None
+            
+            # Extract brand from product name if not found
+            if not brand and name:
+                # First word is usually the brand
+                brand = name.split()[0] if ' ' in name else None
 
             # Extract availability
             avail_elem = element.select_one(self.selectors['availability'])

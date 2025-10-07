@@ -30,9 +30,9 @@ logging:
   rotation: daily
 
 bilka:
-  base_url: "https://bilka.dk"
+  base_url: "https://www.bilka.dk"
   categories:
-    electronics: "/elektronik"
-    home: "/hjem-og-interior"
-    fashion: "/mode"
-    sports: "/sport-og-fritid"
+    electronics: "/elektronik/computere-og-gaming/computere/type/baerbar-computer/windows-computer/pl/windows-baerbar/"
+    home: "/hjem-og-interior/pl/hjem-og-interior/"
+    fashion: "/mode/pl/mode/"
+    sports: "/sport-og-fritid/pl/sport-og-fritid/"

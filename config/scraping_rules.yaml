@@ -1,14 +1,28 @@
 selectors:
-  product_container: ".product-card"
+  # Main product container - each product card
+  product_container: "a.product-card"
+  
+  # Product details
   product_name: ".v-card__title"
-  price_regular: ".after-price"
-  price_sale: ".price-sale"
-  discount_badge: ".discount-percentage"
-  product_image: ".product-image img"
-  product_url: ".product-card"
-  availability: ".stock-status"
-  category_breadcrumb: ".breadcrumb"
-  brand: ".product-brand"
+  product_description: ".description-text"
+  
+  # Pricing selectors
+  price_before: ".before-price .amount"  # Original price (før)
+  price_current: ".price-text .amount"  # Current/sale price
+  
+  # Discount badge
+  discount_badge: ".sticker__promotionSaving"  # Contains "Spar X%"
+  
+  # Images and URLs
+  product_image: ".v-image__image"
+  product_url: "a.product-card"  # The href attribute
+  
+  # Availability
+  availability: ".text-right"  # Stock status text
+  store_stock: ".store-stock"  # Click&Collect availability
+  
+  # Brand info
+  brand: ".product-brand"  # May not always be present
 
 patterns:
   price_regex: "(\\d+[,.]\\d{2})"
