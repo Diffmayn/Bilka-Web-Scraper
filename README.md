@@ -1,5 +1,11 @@
 # Bilka Price Monitor - Advanced Deal Detection System
 
+> **🏠 RECOMMENDED: Local Hosting**  
+> Bilka.dk blocks Streamlit Cloud (bot detection). Use local setup instead - works perfectly!  
+> **→ [Quick Start Guide](START_HERE.md)** | **→ [Full Setup](LOCAL_SETUP.md)**
+
+> **🎯 Identifies Unnaturally Good Deals** - Advanced anomaly detection for Bilka.dk pricesilka Price Monitor - Advanced Deal Detection System
+
 > **� Identifies Unnaturally Good Deals** - Advanced anomaly detection for Bilka.dk prices
 
 A sophisticated web-based price monitoring application for BILKA.dk with **enterprise-grade anomaly detection** specifically designed to identify suspicious deals, fake discounts, and pricing errors. Features 5 different detection algorithms, historical price tracking, and an interactive dashboard.
