@@ -84,16 +84,21 @@ class BilkaScraper:
         category_path = self.categories.get(category)
         if not category_path:
             logger.error(f"Unknown category: {category}")
+            logger.error(f"Available categories: {list(self.categories.keys())}")
             return []
 
         url = f"{self.base_url}{category_path}"
+        logger.info(f"Scraping URL: {url}")
+        logger.info(f"Looking for selector: {self.parser.selectors['product_container']}")
         products = []
 
         try:
             with self.session_manager as driver:
                 # Navigate to category page
+                logger.info("Navigating to page...")
                 driver.get(url)
                 self._random_delay()
+                logger.info("Page loaded, waiting for products...")
 
                 # Wait for products to load
                 try:
@@ -102,16 +107,47 @@ class BilkaScraper:
                             (By.CSS_SELECTOR, self.parser.selectors['product_container'])
                         )
                     )
+                    logger.info("Products container found!")
                 except TimeoutException:
-                    logger.warning(f"Timeout waiting for products on {url}")
+                    logger.error(f"TIMEOUT: Could not find selector '{self.parser.selectors['product_container']}' on {url}")
+                    
+                    # Debug: Try to find what's actually on the page
+                    try:
+                        from selenium.webdriver.common.by import By
+                        all_links = driver.find_elements(By.TAG_NAME, 'a')
+                        logger.error(f"DEBUG: Found {len(all_links)} <a> tags on page")
+                        
+                        product_cards = driver.find_elements(By.CSS_SELECTOR, '.product-card')
+                        logger.error(f"DEBUG: Found {len(product_cards)} elements with class 'product-card'")
+                        
+                        # Save page source for debugging
+                        html = driver.page_source
+                        logger.error(f"DEBUG: Page HTML length: {len(html)} characters")
+                        logger.error(f"DEBUG: First 500 chars: {html[:500]}")
+                        
+                        # Check if page is showing cookie consent or other blocking element
+                        if 'cookie' in html.lower() or 'samtykke' in html.lower():
+                            logger.error("DEBUG: Cookie consent dialog may be blocking content")
+                        if 'robot' in html.lower() or 'captcha' in html.lower():
+                            logger.error("DEBUG: CAPTCHA or robot detection may be blocking")
+                            
+                    except Exception as debug_error:
+                        logger.error(f"DEBUG error: {debug_error}")
+                    
                     return products
 
                 # Scroll to load more products
+                logger.info("Scrolling page to load more products...")
                 self._scroll_page(driver, max_products)
 
                 # Get page HTML and parse
+                logger.info("Getting page HTML...")
                 html = driver.page_source
+                logger.info(f"HTML length: {len(html)} characters")
+                
+                logger.info("Parsing products from HTML...")
                 products = self.parser.parse_products(html)
+                logger.info(f"Parser returned {len(products)} products")
 
                 # Limit to max_products
                 products = products[:max_products]
@@ -124,6 +160,8 @@ class BilkaScraper:
 
         except Exception as e:
             logger.error(f"Error scraping category {category}: {e}")
+            import traceback
+            logger.error(f"Traceback: {traceback.format_exc()}")
 
         return products
 

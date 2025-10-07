@@ -118,11 +118,20 @@ def main():
 
 def scrape_products(category: str, max_products: int, storage: DataStorage):
     """Scrape products and store in database"""
+    
+    # Create expandable section for debug logs
+    debug_expander = st.expander("🔍 Debug Logs", expanded=False)
+    
     with st.spinner(f"Scraping {max_products} products from Bilka.dk ({category})..."):
         try:
             # Check if we should use mock scraper (for testing or when ChromeDriver unavailable)
             import os
             use_mock = os.getenv('USE_MOCK_SCRAPER', 'false').lower() == 'true'
+            
+            with debug_expander:
+                st.text(f"Category: {category}")
+                st.text(f"Max products: {max_products}")
+                st.text(f"Use mock: {use_mock}")
             
             if use_mock:
                 st.warning("⚠️ Using mock data (ChromeDriver not available). Set USE_MOCK_SCRAPER=false for real scraping.")
@@ -130,14 +139,35 @@ def scrape_products(category: str, max_products: int, storage: DataStorage):
                 scraper = MockBilkaScraper()
             else:
                 # Use real scraper
+                st.info("🌐 Using real web scraper (BilkaScraper)")
                 from src.scraper.bilka_scraper import BilkaScraper
                 scraper = BilkaScraper()
+                
+                with debug_expander:
+                    st.text(f"Base URL: {scraper.base_url}")
+                    st.text(f"Available categories: {list(scraper.categories.keys())}")
+                    if category in scraper.categories:
+                        st.text(f"Category path: {scraper.categories[category]}")
+                        st.text(f"Full URL: {scraper.base_url}{scraper.categories[category]}")
+                    st.text(f"Selector: {scraper.parser.selectors.get('product_container', 'NOT SET')}")
 
             # Scrape products
+            st.info(f"🔄 Starting scrape...")
+            with debug_expander:
+                st.text("Calling scraper.scrape_category()...")
+            
             products = scraper.scrape_category(category, max_products)
+            
+            with debug_expander:
+                st.text(f"Scraper returned {len(products)} products")
+                if len(products) > 0:
+                    st.text(f"First product: {products[0].get('name', 'NO NAME')[:50]}")
+                else:
+                    st.text("⚠️ No products returned from scraper!")
 
             if products:
                 # Store in database
+                st.info(f"💾 Storing {len(products)} products...")
                 from src.data.processor import process_products
                 processed = process_products(products)
                 results = storage.store_multiple_products(processed)
@@ -159,9 +189,25 @@ def scrape_products(category: str, max_products: int, storage: DataStorage):
                 st.rerun()
             else:
                 st.error("❌ No products found")
+                st.error("Please check the '🔍 Debug Logs' section above for details")
+                
+                # Additional troubleshooting info
+                st.info("""
+                **Possible causes:**
+                1. ChromeDriver not available on Streamlit Cloud
+                2. Bilka.dk changed their HTML structure
+                3. Cookie consent blocking page load
+                4. CSS selectors are incorrect
+                
+                **Check Streamlit Cloud logs for detailed error messages**
+                """)
 
         except Exception as e:
             st.error(f"❌ Scraping failed: {e}")
+            with debug_expander:
+                import traceback
+                st.text("Full error trace:")
+                st.code(traceback.format_exc())
 
 
 def display_dashboard(storage: DataStorage, min_confidence: float, show_suspicious_only: bool):

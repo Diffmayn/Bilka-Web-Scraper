@@ -164,14 +164,43 @@ class ProductParser:
 
     def parse_products(self, html: str) -> List[Dict]:
         """Parse multiple products from HTML"""
+        logger.info(f"Parsing HTML of length {len(html)}")
+        logger.info(f"Using selector: {self.selectors['product_container']}")
+        
         soup = BeautifulSoup(html, 'html.parser')
         product_elements = soup.select(self.selectors['product_container'])
+        
+        logger.info(f"Found {len(product_elements)} product elements with selector '{self.selectors['product_container']}'")
+        
+        # Debug: Try alternative selectors if main one fails
+        if len(product_elements) == 0:
+            logger.error("No products found with main selector, trying alternatives...")
+            
+            # Try just .product-card
+            alt1 = soup.select('.product-card')
+            logger.error(f"DEBUG: Found {len(alt1)} elements with '.product-card'")
+            
+            # Try a[class*="product"]
+            alt2 = soup.select('a[class*="product"]')
+            logger.error(f"DEBUG: Found {len(alt2)} elements with 'a[class*=\"product\"]'")
+            
+            # Try all <a> tags
+            alt3 = soup.select('a')
+            logger.error(f"DEBUG: Found {len(alt3)} total <a> tags")
+            
+            # Save snippet of HTML for debugging
+            if len(html) > 0:
+                logger.error(f"DEBUG: HTML snippet (first 1000 chars):\n{html[:1000]}")
 
         products = []
-        for element in product_elements:
+        for idx, element in enumerate(product_elements):
+            logger.debug(f"Parsing product {idx + 1}/{len(product_elements)}")
             product = self.parse_product(element)
             if product:
                 products.append(product)
+                logger.debug(f"Successfully parsed: {product.get('name', 'Unknown')[:50]}")
+            else:
+                logger.debug(f"Failed to parse product {idx + 1}")
 
-        logger.info(f"Parsed {len(products)} products from HTML")
+        logger.info(f"Successfully parsed {len(products)} valid products from {len(product_elements)} elements")
         return products
