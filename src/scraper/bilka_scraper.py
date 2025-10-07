@@ -113,7 +113,6 @@ class BilkaScraper:
                     
                     # Debug: Try to find what's actually on the page
                     try:
-                        from selenium.webdriver.common.by import By
                         all_links = driver.find_elements(By.TAG_NAME, 'a')
                         logger.error(f"DEBUG: Found {len(all_links)} <a> tags on page")
                         

@@ -1,0 +1,68 @@
+2025-10-07 20:42:00,186 - selenium.webdriver.common.selenium_manager - DEBUG - Selenium Manager binary found at: C:\Users\248075\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\selenium\webdriver\common\windows\selenium-manager.exe
+2025-10-07 20:42:00,187 - selenium.webdriver.common.selenium_manager - DEBUG - Executing process: C:\Users\248075\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\selenium\webdriver\common\windows\selenium-manager.exe --browser chrome --debug --language-binding python --output json
+2025-10-07 20:42:06,420 - selenium.webdriver.common.selenium_manager - DEBUG - Sending stats to Plausible: Props { browser: "chrome", browser_version: "", os: "windows", arch: "x86_64", lang: "python", selenium_version: "4.36" }
+2025-10-07 20:42:06,421 - selenium.webdriver.common.selenium_manager - DEBUG - chromedriver not found in PATH
+2025-10-07 20:42:06,421 - selenium.webdriver.common.selenium_manager - DEBUG - chrome detected at C:\Program Files\Google\Chrome\Application\chrome.exe
+2025-10-07 20:42:06,421 - selenium.webdriver.common.selenium_manager - DEBUG - Detected browser: chrome 140.0.7339.208
+2025-10-07 20:42:06,421 - selenium.webdriver.common.selenium_manager - DEBUG - Discovering versions from https://googlechromelabs.github.io/chrome-for-testing/known-good-versions-with-downloads.json
+2025-10-07 20:42:06,422 - selenium.webdriver.common.selenium_manager - DEBUG - Required driver: chromedriver 140.0.7339.207
+2025-10-07 20:42:06,422 - selenium.webdriver.common.selenium_manager - DEBUG - Acquiring lock: C:\Users\248075\.cache\selenium\chromedriver\win64\140.0.7339.207\sm.lock
+2025-10-07 20:42:06,422 - selenium.webdriver.common.selenium_manager - DEBUG - Downloading chromedriver 140.0.7339.207 from https://storage.googleapis.com/chrome-for-testing-public/140.0.7339.207/win64/chromedriver-win64.zip
+2025-10-07 20:42:06,423 - selenium.webdriver.common.selenium_manager - DEBUG - Driver path: C:\Users\248075\.cache\selenium\chromedriver\win64\140.0.7339.207\chromedriver.exe
+2025-10-07 20:42:06,423 - selenium.webdriver.common.selenium_manager - DEBUG - Browser path: C:\Program Files\Google\Chrome\Application\chrome.exe
+2025-10-07 20:42:08,949 - selenium.webdriver.common.service - DEBUG - Started executable: `C:\Users\248075\.cache\selenium\chromedriver\win64\140.0.7339.207\chromedriver.exe` in a child process with pid: 10372 using 0 to output -3
+2025-10-07 20:42:09,482 - selenium.webdriver.remote.remote_connection - DEBUG - POST http://localhost:58860/session {'capabilities': {'firstMatch': [{}], 'alwaysMatch': {'browserName': 'chrome', 'pageLoadStrategy': <PageLoadStrategy.normal: 'normal'>, 'browserVersion': None, 'goog:chromeOptions': {'extensions': [], 'binary': 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe', 'args': ['--headless=new', '--no-sandbox', '--disable-dev-shm-usage']}}}}
+2025-10-07 20:42:09,483 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:58860
+2025-10-07 20:42:10,424 - urllib3.connectionpool - DEBUG - http://localhost:58860 "POST /session HTTP/1.1" 200 0
+2025-10-07 20:42:10,425 - selenium.webdriver.remote.remote_connection - DEBUG - Remote response: status=200 | data={"value":{"capabilities":{"acceptInsecureCerts":false,"browserName":"chrome","browserVersion":"140.0.7339.208","chrome":{"chromedriverVersion":"140.0.7339.207 (17230b545fd18b35aad49122e5af97a463bc7a9c-refs/branch-heads/7339@{#2364})","userDataDir":"C:\\Users\\248075\\AppData\\Local\\Temp\\scoped_dir10372_875031628"},"fedcm:accounts":true,"goog:chromeOptions":{"debuggerAddress":"localhost:58876"},"networkConnectionEnabled":false,"pageLoadStrategy":"normal","platformName":"windows","proxy":{},"setWindowRect":true,"strictFileInteractability":false,"timeouts":{"implicit":0,"pageLoad":300000,"script":30000},"unhandledPromptBehavior":"dismiss and notify","webauthn:extension:credBlob":true,"webauthn:extension:largeBlob":true,"webauthn:extension:minPinLength":true,"webauthn:extension:prf":true,"webauthn:virtualAuthenticators":true},"sessionId":"f5e1e19ad4cd138da15b33375701e647"}} | headers=HTTPHeaderDict({'Content-Length': '884', 'Content-Type': 'application/json; charset=utf-8', 'cache-control': 'no-cache'})
+2025-10-07 20:42:10,425 - selenium.webdriver.remote.remote_connection - DEBUG - Finished Request
+2025-10-07 20:42:10,426 - selenium.webdriver.remote.remote_connection - DEBUG - DELETE http://localhost:58860/session/f5e1e19ad4cd138da15b33375701e647 {}
+2025-10-07 20:42:10,518 - urllib3.connectionpool - DEBUG - http://localhost:58860 "DELETE /session/f5e1e19ad4cd138da15b33375701e647 HTTP/1.1" 200 0
+2025-10-07 20:42:10,519 - selenium.webdriver.remote.remote_connection - DEBUG - Remote response: status=200 | data={"value":null} | headers=HTTPHeaderDict({'Content-Length': '14', 'Content-Type': 'application/json; charset=utf-8', 'cache-control': 'no-cache'})
+2025-10-07 20:42:10,520 - selenium.webdriver.remote.remote_connection - DEBUG - Finished Request
+2025-10-07 20:42:12,828 - src.scraper.bilka_scraper - INFO - Starting scrape for category: electronics
+2025-10-07 20:42:12,829 - src.scraper.bilka_scraper - INFO - Scraping URL: https://www.bilka.dk/elektronik/computere-og-gaming/computere/type/baerbar-computer/windows-computer/pl/windows-baerbar/
+2025-10-07 20:42:12,829 - src.scraper.bilka_scraper - INFO - Looking for selector: a.product-card
+2025-10-07 20:42:12,878 - WDM - INFO - ====== WebDriver manager ======
+2025-10-07 20:42:14,176 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2025-10-07 20:42:14,179 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): googlechromelabs.github.io:443
+2025-10-07 20:42:14,867 - src.scraper.session_manager - WARNING - webdriver-manager failed: Could not reach host. Are you offline?, trying default ChromeDriver
+2025-10-07 20:42:14,868 - selenium.webdriver.common.selenium_manager - DEBUG - Selenium Manager binary found at: C:\Users\248075\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\selenium\webdriver\common\windows\selenium-manager.exe
+2025-10-07 20:42:14,869 - selenium.webdriver.common.selenium_manager - DEBUG - Executing process: C:\Users\248075\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\selenium\webdriver\common\windows\selenium-manager.exe --browser chrome --debug --language-binding python --output json
+2025-10-07 20:42:14,969 - selenium.webdriver.common.selenium_manager - DEBUG - chromedriver not found in PATH
+2025-10-07 20:42:14,969 - selenium.webdriver.common.selenium_manager - DEBUG - chrome detected at C:\Program Files\Google\Chrome\Application\chrome.exe
+2025-10-07 20:42:14,969 - selenium.webdriver.common.selenium_manager - DEBUG - Detected browser: chrome 140.0.7339.208
+2025-10-07 20:42:14,969 - selenium.webdriver.common.selenium_manager - DEBUG - Required driver: chromedriver 140.0.7339.207
+2025-10-07 20:42:14,970 - selenium.webdriver.common.selenium_manager - DEBUG - chromedriver 140.0.7339.207 already in the cache
+2025-10-07 20:42:14,970 - selenium.webdriver.common.selenium_manager - DEBUG - Driver path: C:\Users\248075\.cache\selenium\chromedriver\win64\140.0.7339.207\chromedriver.exe
+2025-10-07 20:42:14,970 - selenium.webdriver.common.selenium_manager - DEBUG - Browser path: C:\Program Files\Google\Chrome\Application\chrome.exe
+2025-10-07 20:42:14,978 - selenium.webdriver.common.service - DEBUG - Started executable: `C:\Users\248075\.cache\selenium\chromedriver\win64\140.0.7339.207\chromedriver.exe` in a child process with pid: 6156 using 0 to output -3
+2025-10-07 20:42:15,484 - selenium.webdriver.remote.remote_connection - DEBUG - POST http://localhost:58891/session {'capabilities': {'firstMatch': [{}], 'alwaysMatch': {'browserName': 'chrome', 'pageLoadStrategy': <PageLoadStrategy.normal: 'normal'>, 'browserVersion': None, 'goog:chromeOptions': {'excludeSwitches': ['enable-automation'], 'useAutomationExtension': False, 'extensions': [], 'binary': 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe', 'args': ['--no-sandbox', '--disable-dev-shm-usage', '--disable-gpu', '--window-size=1920,1080', 'user-agent=Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36', '--disable-blink-features=AutomationControlled', '--disable-extensions', '--disable-plugins', '--incognito', '--disable-setuid-sandbox', '--remote-debugging-port=9222']}}}}
+2025-10-07 20:42:15,486 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:58891
+2025-10-07 20:42:16,430 - urllib3.connectionpool - DEBUG - http://localhost:58891 "POST /session HTTP/1.1" 200 0
+2025-10-07 20:42:16,432 - selenium.webdriver.remote.remote_connection - DEBUG - Remote response: status=200 | data={"value":{"capabilities":{"acceptInsecureCerts":false,"browserName":"chrome","browserVersion":"140.0.7339.208","chrome":{"chromedriverVersion":"140.0.7339.207 (17230b545fd18b35aad49122e5af97a463bc7a9c-refs/branch-heads/7339@{#2364})","userDataDir":"C:\\Users\\248075\\AppData\\Local\\Temp\\scoped_dir6156_19816670"},"fedcm:accounts":true,"goog:chromeOptions":{"debuggerAddress":"localhost:9222"},"networkConnectionEnabled":false,"pageLoadStrategy":"normal","platformName":"windows","proxy":{},"setWindowRect":true,"strictFileInteractability":false,"timeouts":{"implicit":0,"pageLoad":300000,"script":30000},"unhandledPromptBehavior":"dismiss and notify","webauthn:extension:credBlob":true,"webauthn:extension:largeBlob":true,"webauthn:extension:minPinLength":true,"webauthn:extension:prf":true,"webauthn:virtualAuthenticators":true},"sessionId":"707e11f83b4174407318a455b20e77a0"}} | headers=HTTPHeaderDict({'Content-Length': '881', 'Content-Type': 'application/json; charset=utf-8', 'cache-control': 'no-cache'})
+2025-10-07 20:42:16,437 - selenium.webdriver.remote.remote_connection - DEBUG - Finished Request
+2025-10-07 20:42:16,438 - src.scraper.session_manager - INFO - Chrome WebDriver created with system ChromeDriver
+2025-10-07 20:42:16,439 - selenium.webdriver.remote.remote_connection - DEBUG - POST http://localhost:58891/session/707e11f83b4174407318a455b20e77a0/goog/cdp/execute {'cmd': 'Page.addScriptToEvaluateOnNewDocument', 'params': {'source': "\n                    Object.defineProperty(navigator, 'webdriver', {\n                        get: ()..."}}
+2025-10-07 20:42:16,495 - urllib3.connectionpool - DEBUG - http://localhost:58891 "POST /session/707e11f83b4174407318a455b20e77a0/goog/cdp/execute HTTP/1.1" 200 0
+2025-10-07 20:42:16,495 - selenium.webdriver.remote.remote_connection - DEBUG - Remote response: status=200 | data={"value":{"identifier":"2"}} | headers=HTTPHeaderDict({'Content-Length': '28', 'Content-Type': 'application/json; charset=utf-8', 'cache-control': 'no-cache'})
+2025-10-07 20:42:16,496 - selenium.webdriver.remote.remote_connection - DEBUG - Finished Request
+2025-10-07 20:42:16,496 - src.scraper.session_manager - INFO - Chrome WebDriver initialized successfully
+2025-10-07 20:42:16,496 - src.scraper.bilka_scraper - INFO - Navigating to page...
+2025-10-07 20:42:16,497 - selenium.webdriver.remote.remote_connection - DEBUG - POST http://localhost:58891/session/707e11f83b4174407318a455b20e77a0/url {'url': 'https://www.bilka.dk/elektronik/computere-og-gaming/computere/type/baerbar-computer/windows-computer...'}
+2025-10-07 20:42:18,995 - urllib3.connectionpool - DEBUG - http://localhost:58891 "POST /session/707e11f83b4174407318a455b20e77a0/url HTTP/1.1" 200 0
+2025-10-07 20:42:18,995 - selenium.webdriver.remote.remote_connection - DEBUG - Remote response: status=200 | data={"value":null} | headers=HTTPHeaderDict({'Content-Length': '14', 'Content-Type': 'application/json; charset=utf-8', 'cache-control': 'no-cache'})
+2025-10-07 20:42:18,996 - selenium.webdriver.remote.remote_connection - DEBUG - Finished Request
+2025-10-07 20:42:22,664 - src.scraper.bilka_scraper - INFO - Page loaded, waiting for products...
+2025-10-07 20:42:22,666 - selenium.webdriver.remote.remote_connection - DEBUG - DELETE http://localhost:58891/session/707e11f83b4174407318a455b20e77a0 {}
+2025-10-07 20:42:22,836 - urllib3.connectionpool - DEBUG - http://localhost:58891 "DELETE /session/707e11f83b4174407318a455b20e77a0 HTTP/1.1" 200 0
+2025-10-07 20:42:22,836 - selenium.webdriver.remote.remote_connection - DEBUG - Remote response: status=200 | data={"value":null} | headers=HTTPHeaderDict({'Content-Length': '14', 'Content-Type': 'application/json; charset=utf-8', 'cache-control': 'no-cache'})
+2025-10-07 20:42:22,837 - selenium.webdriver.remote.remote_connection - DEBUG - Finished Request
+2025-10-07 20:42:24,914 - src.scraper.session_manager - INFO - Chrome WebDriver closed
+2025-10-07 20:42:24,915 - src.scraper.bilka_scraper - ERROR - Error scraping category electronics: cannot access local variable 'By' where it is not associated with a value
+2025-10-07 20:42:24,916 - src.scraper.bilka_scraper - ERROR - Traceback: Traceback (most recent call last):
+  File "C:\Users\248075\.vscode\cli\WEb SCraper\bilka_price_monitor\src\scraper\bilka_scraper.py", line 107, in scrape_category
+    (By.CSS_SELECTOR, self.parser.selectors['product_container'])
+     ^^
+UnboundLocalError: cannot access local variable 'By' where it is not associated with a value
+

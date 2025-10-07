@@ -7,8 +7,8 @@ selectors:
   product_description: ".description-text"
   
   # Pricing selectors
-  price_before: ".before-price .amount"  # Original price (før)
-  price_current: ".price-text .amount"  # Current/sale price
+  price_before: ".before-price"  # Original price (før)
+  price_current: ".after-price"  # Current/sale price
   
   # Discount badge
   discount_badge: ".sticker__promotionSaving"  # Contains "Spar X%"
