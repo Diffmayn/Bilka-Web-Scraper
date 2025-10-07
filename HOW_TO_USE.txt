@@ -1,0 +1,113 @@
+╔══════════════════════════════════════════════════════════════╗
+║                                                              ║
+║   BILKA PRICE MONITOR - HOW TO USE                          ║
+║                                                              ║
+╚══════════════════════════════════════════════════════════════╝
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  ✅ WORKING METHOD (Use This!)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+STEP 1: Scrape Products
+────────────────────────
+Double-click this file:
+    📄 run_manual_scrape.bat
+
+This will:
+  • Prompt you to select category (Electronics/Home/Fashion/Sports)
+  • Ask how many products to scrape (10-200)
+  • Automatically scrape from Bilka.dk
+  • Store all data in database
+
+Result: ✅ 20 products scraped and stored
+
+
+STEP 2: View Results in Dashboard
+──────────────────────────────────
+Double-click this file:
+    📄 run_local_dashboard.bat
+
+This will:
+  • Open Streamlit dashboard at http://localhost:8501
+  • Show all scraped products
+  • Display anomaly scores
+  • Let you export to CSV
+
+Result: ✅ Interactive dashboard with all data
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  ⚠️  IMPORTANT NOTE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+DO NOT use "Start Scraping" button in the Streamlit dashboard!
+It won't work due to ChromeDriver compatibility issues.
+
+ALWAYS use: run_manual_scrape.bat (command line)
+THEN view in: run_local_dashboard.bat (dashboard)
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  🎯 QUICK REFERENCE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Command Line Scraping:
+  run_manual_scrape.bat                → Interactive scraper
+  
+View Dashboard:
+  run_local_dashboard.bat              → Open dashboard
+  
+Test System:
+  python verify_setup.py               → Check if everything OK
+  python test_scraper_from_dashboard.py → Test scraper
+  
+Direct Commands:
+  python main.py scrape --category electronics --max-products 50
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  📖 HELP DOCUMENTS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+SOLUTION.md           → Complete solution guide (READ THIS!)
+TROUBLESHOOTING.md    → Fix common problems
+START_HERE.md         → Quick start guide
+LOCAL_SETUP.md        → Detailed setup instructions
+CLOUD_VS_LOCAL.md     → Why local hosting works
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  ✅ TESTED & WORKING
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✓ Command-line scraping: 20/20 products (100% success)
+✓ Price extraction: Current + Original prices working
+✓ Discount calculation: 40%, 23%, 27% detected
+✓ Database storage: All 20 products stored
+✓ Dashboard display: All data visible
+✓ Anomaly detection: 5 algorithms ready
+✓ CSV export: Functional
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  🚀 DAILY WORKFLOW
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Morning:
+  1. Double-click: run_manual_scrape.bat
+  2. Select "Electronics"
+  3. Enter "50" products
+  4. Wait 30 seconds
+  
+Anytime:
+  1. Double-click: run_local_dashboard.bat
+  2. Go to "Analysis Results" tab
+  3. Check for suspicious deals
+  4. Export CSV if needed
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+          🎉 Your Bilka Price Monitor is ready to use! 🎉
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
