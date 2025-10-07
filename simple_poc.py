@@ -18,8 +18,16 @@ from pathlib import Path
 project_root = Path(__file__).parent
 sys.path.insert(0, str(project_root))
 
-# Import our modules
-from src.scraper.bilka_scraper import BilkaScraper
+# Import our modules - use real or mock scraper based on environment
+import os
+USE_MOCK = os.getenv('USE_MOCK_SCRAPER', 'false').lower() == 'true'
+
+if USE_MOCK:
+    from src.scraper.mock_scraper import MockBilkaScraper as BilkaScraper
+    print("⚠️ Using mock scraper (set USE_MOCK_SCRAPER=false for real scraping)")
+else:
+    from src.scraper.bilka_scraper import BilkaScraper
+
 from src.data.storage import DataStorage
 from src.analysis.discount_analyzer import DiscountAnalyzer
 
@@ -227,7 +235,7 @@ def main():
     )
 
     st.title("🛒 Bilka Price Monitor - POC")
-    st.markdown("**Simple web-based price monitoring for BILKA.dk**")
+    st.markdown("**Web-based price monitoring for BILKA.dk with advanced anomaly detection**")
     st.markdown("---")
 
     # Initialize monitor

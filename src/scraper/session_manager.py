@@ -53,11 +53,13 @@ class SessionManager:
         # Performance optimizations
         options.add_argument("--disable-extensions")
         options.add_argument("--disable-plugins")
-        options.add_argument("--disable-images")  # Faster loading
-        options.add_argument("--disable-javascript")  # If content is server-side rendered
-
+        
         # Privacy settings
         options.add_argument("--incognito")
+        
+        # Additional options for Streamlit Cloud / Linux
+        options.add_argument("--disable-setuid-sandbox")
+        options.add_argument("--remote-debugging-port=9222")
 
         return options
 
@@ -69,11 +71,24 @@ class SessionManager:
             # Try with webdriver-manager first
             try:
                 from webdriver_manager.chrome import ChromeDriverManager
-                service = Service(ChromeDriverManager().install())
+                from webdriver_manager.core.os_manager import ChromeType
+                
+                # Check if running on Linux (Streamlit Cloud)
+                import platform
+                if platform.system() == 'Linux':
+                    # Use chromium on Linux
+                    service = Service(ChromeDriverManager(chrome_type=ChromeType.CHROMIUM).install())
+                else:
+                    # Use regular Chrome on Windows/Mac
+                    service = Service(ChromeDriverManager().install())
+                    
                 driver = webdriver.Chrome(service=service, options=options)
-            except Exception:
+                logger.info("Chrome WebDriver created with webdriver-manager")
+            except Exception as e:
+                logger.warning(f"webdriver-manager failed: {e}, trying default ChromeDriver")
                 # Fall back to default ChromeDriver
                 driver = webdriver.Chrome(options=options)
+                logger.info("Chrome WebDriver created with system ChromeDriver")
 
             # Additional stealth JavaScript
             driver.execute_cdp_cmd("Page.addScriptToEvaluateOnNewDocument", {
@@ -85,7 +100,7 @@ class SessionManager:
             })
 
             self.driver = driver
-            logger.info("Chrome WebDriver created successfully")
+            logger.info("Chrome WebDriver initialized successfully")
             return driver
 
         except WebDriverException as e:

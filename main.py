@@ -12,14 +12,15 @@ from pathlib import Path
 # Add src to path
 sys.path.insert(0, str(Path(__file__).parent / "src"))
 
-# Check if we should use mock scraper
+# Check if we should use mock scraper (for testing or when ChromeDriver unavailable)
 USE_MOCK_SCRAPER = os.getenv('USE_MOCK_SCRAPER', 'false').lower() == 'true'
 
 if USE_MOCK_SCRAPER:
     from scraper.mock_scraper import MockBilkaScraper as BilkaScraper
-    print("🔧 Using Mock Scraper (no web scraping)")
+    print("⚠️ Using Mock Scraper (set USE_MOCK_SCRAPER=false for real web scraping)")
 else:
     from scraper.bilka_scraper import BilkaScraper
+    print("✓ Using Real Web Scraper")
 
 from data.storage import initialize_database, create_data_storage
 from data.processor import process_products

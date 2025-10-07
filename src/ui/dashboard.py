@@ -46,28 +46,25 @@ def main():
     # Sidebar
     with st.sidebar:
         st.header("⚙️ Controls")
-        
-        # Demo notice
-        st.info("**🎭 Demo Mode**\n\nThis app generates mock data for demonstration. Real web scraping requires ChromeDriver setup.")
 
         # Scraping section
-        st.subheader("🔍 Generate Sample Data")
+        st.subheader("🔍 Scrape Products")
         category = st.selectbox(
             "Category",
             ["electronics", "home", "fashion", "sports"],
-            help="Select product category to generate"
+            help="Select product category to scrape from Bilka.dk"
         )
 
         max_products = st.slider(
-            "Number of Products",
+            "Max Products",
             min_value=10,
             max_value=200,
             value=50,
             step=10,
-            help="Number of sample products to generate"
+            help="Maximum number of products to scrape from Bilka.dk"
         )
 
-        if st.button("🚀 Generate Sample Data", type="primary"):
+        if st.button("🚀 Start Scraping", type="primary"):
             scrape_products(category, max_products, storage)
 
         st.markdown("---")
@@ -92,8 +89,13 @@ def main():
         st.markdown("---")
         st.subheader("ℹ️ About")
         st.info(
-            "This tool identifies **unnaturally good deals** on Bilka.dk using "
-            "advanced statistical analysis and anomaly detection."
+            "This tool scrapes Bilka.dk and identifies **unnaturally good deals** using "
+            "5 advanced detection algorithms:\n\n"
+            "• Statistical outlier detection\n"
+            "• Fake discount detection\n"
+            "• Too-good-to-be-true analysis\n"
+            "• Price manipulation detection\n"
+            "• IQR method analysis"
         )
 
     # Main content
@@ -102,15 +104,20 @@ def main():
 
 def scrape_products(category: str, max_products: int, storage: DataStorage):
     """Scrape products and store in database"""
-    with st.spinner(f"Scraping {max_products} products from {category}..."):
+    with st.spinner(f"Scraping {max_products} products from Bilka.dk ({category})..."):
         try:
-            # Always use mock scraper for Streamlit Cloud deployment
-            # (Real scraping requires ChromeDriver which isn't available on Streamlit Cloud)
+            # Check if we should use mock scraper (for testing or when ChromeDriver unavailable)
             import os
-            os.environ['USE_MOCK_SCRAPER'] = 'true'
-
-            from src.scraper.mock_scraper import MockBilkaScraper
-            scraper = MockBilkaScraper()
+            use_mock = os.getenv('USE_MOCK_SCRAPER', 'false').lower() == 'true'
+            
+            if use_mock:
+                st.warning("⚠️ Using mock data (ChromeDriver not available). Set USE_MOCK_SCRAPER=false for real scraping.")
+                from src.scraper.mock_scraper import MockBilkaScraper
+                scraper = MockBilkaScraper()
+            else:
+                # Use real scraper
+                from src.scraper.bilka_scraper import BilkaScraper
+                scraper = BilkaScraper()
 
             # Scrape products
             products = scraper.scrape_category(category, max_products)
@@ -150,19 +157,24 @@ def display_dashboard(storage: DataStorage, min_confidence: float, show_suspicio
     try:
         products = storage.get_products(limit=500)
     except Exception as e:
-        st.error("⚠️ Database not initialized. Click 'Start Scraping' to generate sample data.")
+        st.error("⚠️ Database not initialized. Click 'Start Scraping' to begin collecting data from Bilka.dk")
         st.info("""
         **Welcome to Bilka Price Monitor! 🛒**
         
-        This app uses **mock data** for demonstration purposes (real web scraping requires ChromeDriver).
+        **Advanced Price Monitoring & Deal Detection for Bilka.dk**
+        
+        This application scrapes real product data from Bilka.dk and uses advanced algorithms to identify:
+        - 🚨 Unnaturally good deals (too good to be true)
+        - 🎭 Fake discounts with inflated original prices
+        - 📊 Statistical price outliers
+        - ⚠️ Price manipulation patterns
         
         **To get started:**
         1. Select a category from the sidebar
-        2. Choose how many products to generate (10-200)
-        3. Click "🚀 Start Scraping" to generate sample data
+        2. Choose how many products to scrape (10-200)
+        3. Click "🚀 Start Scraping" to collect data from Bilka.dk
         
-        The app will create realistic product data with various discounts, 
-        including some "too good to be true" deals for testing the anomaly detection.
+        **Note:** Real web scraping requires ChromeDriver. If unavailable, the app will use mock data automatically.
         """)
         return
 
@@ -170,15 +182,20 @@ def display_dashboard(storage: DataStorage, min_confidence: float, show_suspicio
         st.info("""
         **Welcome to Bilka Price Monitor! 🛒**
         
-        This app uses **mock data** for demonstration purposes (real web scraping requires ChromeDriver).
+        **Advanced Price Monitoring & Deal Detection for Bilka.dk**
+        
+        This application scrapes real product data from Bilka.dk and uses advanced algorithms to identify:
+        - 🚨 Unnaturally good deals (too good to be true)
+        - 🎭 Fake discounts with inflated original prices
+        - 📊 Statistical price outliers
+        - ⚠️ Price manipulation patterns
         
         **To get started:**
         1. Select a category from the sidebar
-        2. Choose how many products to generate (10-200)
-        3. Click "🚀 Start Scraping" to generate sample data
+        2. Choose how many products to scrape (10-200)
+        3. Click "🚀 Start Scraping" to collect data from Bilka.dk
         
-        The app will create realistic product data with various discounts, 
-        including some "too good to be true" deals for testing the anomaly detection.
+        **Note:** Real web scraping requires ChromeDriver. If unavailable, the app will use mock data automatically.
         """)
         return
 
