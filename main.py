@@ -9,23 +9,23 @@ import sys
 import os
 from pathlib import Path
 
-# Add src to path
-sys.path.insert(0, str(Path(__file__).parent / "src"))
+# Ensure project root is on sys.path so `src.*` imports work consistently.
+sys.path.insert(0, str(Path(__file__).parent))
 
 # Check if we should use mock scraper (for testing or when ChromeDriver unavailable)
 USE_MOCK_SCRAPER = os.getenv('USE_MOCK_SCRAPER', 'false').lower() == 'true'
 
 if USE_MOCK_SCRAPER:
-    from scraper.mock_scraper import MockBilkaScraper as BilkaScraper
+    from src.scraper.mock_scraper import MockBilkaScraper as BilkaScraper
     print("⚠️ Using Mock Scraper (set USE_MOCK_SCRAPER=false for real web scraping)")
 else:
-    from scraper.bilka_scraper import BilkaScraper
+    from src.scraper.bilka_scraper import BilkaScraper
     print("✓ Using Real Web Scraper")
 
-from data.storage import initialize_database, create_data_storage
-from data.processor import process_products
-from analysis.discount_analyzer import analyze_product_discounts
-from analysis.price_validator import validate_product_prices
+from src.data.storage import initialize_database, create_data_storage
+from src.data.processor import process_products
+from src.analysis.discount_analyzer import analyze_product_discounts
+from src.analysis.price_validator import validate_product_prices
 
 
 def main():
@@ -107,6 +107,19 @@ def run_scraping(category: str, max_products: int, config_path: str):
 
         for cat, products in results.items():
             print(f"  - {cat}: {len(products)} products")
+
+        # Process and store per-category
+        data_storage = create_data_storage()
+        total_stored = 0
+        total_failed = 0
+        for cat, products in results.items():
+            if not products:
+                continue
+            processed_products = process_products(products)
+            store_results = data_storage.store_multiple_products(processed_products)
+            total_stored += store_results.get('successful', 0)
+            total_failed += store_results.get('failed', 0)
+        print(f"✅ Stored {total_stored} products successfully ({total_failed} failed)")
     else:
         products = scraper.scrape_category(category, max_products)
         print(f"✅ Scraped {len(products)} products from {category}")
@@ -125,22 +138,27 @@ def run_analysis(output_file: str = None):
 
     data_storage = create_data_storage()
 
-    # Get sample data for analysis (in real implementation, this would be from database)
-    # For now, we'll create sample data
     import pandas as pd
-    import numpy as np
+    products = data_storage.get_products(limit=5000)
+    if not products:
+        print("⚠️ No products found in database. Run `python main.py scrape ...` first.")
+        return
 
-    np.random.seed(42)
-    sample_data = pd.DataFrame({
-        'external_id': [f'P{i:04d}' for i in range(500)],
-        'name': [f'Sample Product {i}' for i in range(500)],
-        'regular_price': np.random.uniform(50, 2000, 500),
-        'sale_price': np.random.uniform(30, 1500, 500),
-        'discount_percentage': np.random.uniform(5, 80, 500)
-    })
+    df = pd.DataFrame([
+        {
+            'external_id': p.external_id,
+            'name': p.name,
+            'category': p.category,
+            'current_price': p.current_price,
+            'original_price': p.original_price,
+            'discount_percentage': p.discount_percentage or 0,
+            'url': p.url,
+            'scraped_at': p.scraped_at,
+        }
+        for p in products
+    ])
 
-    # Run analysis
-    analysis = analyze_product_discounts(sample_data)
+    analysis = analyze_product_discounts(df)
 
     print("📊 Analysis Results:")
     print(f"  Total Products: {analysis.total_products}")
@@ -177,26 +195,28 @@ def run_validation(output_file: str = None):
     """Run price validation on stored data."""
     print("Running price validation...")
 
-    # Create sample data for validation
     import pandas as pd
-    import numpy as np
+    data_storage = create_data_storage()
+    products = data_storage.get_products(limit=5000)
+    if not products:
+        print("⚠️ No products found in database. Run `python main.py scrape ...` first.")
+        return
 
-    np.random.seed(42)
-    sample_data = pd.DataFrame({
-        'external_id': [f'P{i:04d}' for i in range(500)],
-        'name': [f'Sample Product {i}' for i in range(500)],
-        'regular_price': np.random.uniform(50, 2000, 500),
-        'sale_price': np.random.uniform(30, 1500, 500),
-        'discount_percentage': np.random.uniform(5, 80, 500)
-    })
+    df = pd.DataFrame([
+        {
+            'external_id': p.external_id,
+            'name': p.name,
+            'category': p.category,
+            'current_price': p.current_price,
+            'original_price': p.original_price,
+            'discount_percentage': p.discount_percentage or 0,
+            'url': p.url,
+            'scraped_at': p.scraped_at,
+        }
+        for p in products
+    ])
 
-    # Add some errors for testing
-    sample_data.loc[0:10, 'discount_percentage'] = 95  # Extreme discounts
-    sample_data.loc[11:15, 'sale_price'] = sample_data.loc[11:15, 'regular_price'] * 1.1  # Sale > regular
-    sample_data.loc[16:20, 'regular_price'] = -100  # Negative prices
-
-    # Run validation
-    validation_report = validate_product_prices(sample_data)
+    validation_report = validate_product_prices(df)
 
     print("🔍 Validation Results:")
     print(f"  Total Products: {validation_report.total_products}")
@@ -224,9 +244,9 @@ def run_validation(output_file: str = None):
                 'invalid_products': validation_report.invalid_products,
                 'validation_rate': validation_report.valid_products/validation_report.total_products*100
             },
-            'errors': validation_report.validation_errors,
-            'anomaly_summary': validation_report.anomaly_summary,
-            'recommendations': validation_report.recommendations
+            'errors': validation_report.errors,
+            'warnings': validation_report.warnings,
+            'validation_passed': validation_report.validation_passed
         }
 
         with open(output_file, 'w') as f:
@@ -240,7 +260,7 @@ def run_dashboard():
     print("Open your browser to http://localhost:8501")
 
     try:
-        from ui.dashboard import main
+        from src.ui.dashboard import main
         main()
     except ImportError as e:
         print(f"❌ Error importing dashboard: {e}")

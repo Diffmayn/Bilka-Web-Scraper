@@ -9,6 +9,14 @@ import sys
 import os
 import time
 
+import pytest
+
+
+# This test suite requires Docker and a running dashboard; skip under pytest
+# unless explicitly enabled.
+if os.getenv("RUN_INTEGRATION_TESTS", "").lower() not in {"1", "true", "yes"}:
+    pytest.skip("Skipping Docker/online deployment integration tests (set RUN_INTEGRATION_TESTS=1 to run)", allow_module_level=True)
+
 try:
     import requests
     REQUESTS_AVAILABLE = True
@@ -23,22 +31,22 @@ def test_dashboard_access():
 
     try:
         response = requests.get("http://localhost:8501/_stcore/health", timeout=5)
-        return response.status_code == 200
+        assert response.status_code == 200
     except requests.RequestException:
-        return False
+        pytest.fail("Dashboard health endpoint not reachable")
     except Exception:
-        return False
+        raise
 
 def test_docker_compose():
     """Test if docker-compose is working"""
     try:
         result = subprocess.run(["docker-compose", "ps"],
                               capture_output=True, text=True, check=False)
-        return result.returncode == 0
+        assert result.returncode == 0
     except FileNotFoundError:
-        return False
+        pytest.skip("docker-compose not found")
     except Exception:
-        return False
+        raise
 
 def main():
     print("🔍 Bilka Price Monitor - Online Deployment Test")

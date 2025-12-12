@@ -89,50 +89,67 @@ class BilkaScraper:
 
         url = f"{self.base_url}{category_path}"
         logger.info(f"Scraping URL: {url}")
-        logger.info(f"Looking for selector: {self.parser.selectors['product_container']}")
+
+        product_container_selector = self.parser.selectors.get('product_container')
+        if not product_container_selector:
+            logger.error("Missing selector 'product_container' in scraping rules")
+            return []
+
+        logger.info(f"Looking for selector: {product_container_selector}")
         products = []
 
         try:
             with self.session_manager as driver:
-                # Navigate to category page
-                logger.info("Navigating to page...")
-                driver.get(url)
-                self._random_delay()
-                logger.info("Page loaded, waiting for products...")
+                # Navigate to category page with retries
+                last_error: Exception | None = None
+                for attempt in range(1, self.max_retries + 1):
+                    try:
+                        logger.info(f"Navigating to page (attempt {attempt}/{self.max_retries})...")
+                        driver.get(url)
+                        self._random_delay()
+                        logger.info("Page loaded, waiting for products...")
 
-                # Wait for products to load
-                try:
-                    WebDriverWait(driver, self.timeout).until(
-                        EC.presence_of_element_located(
-                            (By.CSS_SELECTOR, self.parser.selectors['product_container'])
+                        WebDriverWait(driver, self.timeout).until(
+                            EC.presence_of_element_located(
+                                (By.CSS_SELECTOR, product_container_selector)
+                            )
                         )
-                    )
-                    logger.info("Products container found!")
-                except TimeoutException:
-                    logger.error(f"TIMEOUT: Could not find selector '{self.parser.selectors['product_container']}' on {url}")
-                    
+                        logger.info("Products container found!")
+                        last_error = None
+                        break
+                    except TimeoutException as e:
+                        last_error = e
+                        logger.error(f"TIMEOUT: Could not find selector '{product_container_selector}' on {url}")
+                        if attempt < self.max_retries:
+                            self._random_delay()
+                            continue
+                    except Exception as e:
+                        last_error = e
+                        logger.error(f"Error loading page: {e}")
+                        if attempt < self.max_retries:
+                            self._random_delay()
+                            continue
+
+                if last_error is not None:
                     # Debug: Try to find what's actually on the page
                     try:
                         all_links = driver.find_elements(By.TAG_NAME, 'a')
                         logger.error(f"DEBUG: Found {len(all_links)} <a> tags on page")
-                        
+
                         product_cards = driver.find_elements(By.CSS_SELECTOR, '.product-card')
                         logger.error(f"DEBUG: Found {len(product_cards)} elements with class 'product-card'")
-                        
-                        # Save page source for debugging
+
                         html = driver.page_source
                         logger.error(f"DEBUG: Page HTML length: {len(html)} characters")
                         logger.error(f"DEBUG: First 500 chars: {html[:500]}")
-                        
-                        # Check if page is showing cookie consent or other blocking element
+
                         if 'cookie' in html.lower() or 'samtykke' in html.lower():
                             logger.error("DEBUG: Cookie consent dialog may be blocking content")
                         if 'robot' in html.lower() or 'captcha' in html.lower():
                             logger.error("DEBUG: CAPTCHA or robot detection may be blocking")
-                            
                     except Exception as debug_error:
                         logger.error(f"DEBUG error: {debug_error}")
-                    
+
                     return products
 
                 # Scroll to load more products
@@ -189,10 +206,10 @@ class BilkaScraper:
 
             # Count loaded products
             try:
-                product_elements = driver.find_elements(
-                    By.CSS_SELECTOR,
-                    self.parser.selectors['product_container']
-                )
+                selector = self.parser.selectors.get('product_container')
+                if not selector:
+                    break
+                product_elements = driver.find_elements(By.CSS_SELECTOR, selector)
                 products_loaded = len(product_elements)
                 logger.debug(f"Loaded {products_loaded} products after scroll")
             except Exception as e:

@@ -41,17 +41,29 @@ class ProductParser:
             # Remove common text like "Før", "Plus evt. fragt", "kr", "DKK", etc.
             price_text = price_text.replace('Før', '').replace('Plus evt. fragt', '')
             price_text = price_text.replace('kr', '').replace('DKK', '').replace(',-', '')
-            price_text = price_text.strip()
-            
-            # Danish format uses dot as thousand separator: 7.499 = 7499
-            # Remove dots used as thousand separators
-            price_text = price_text.replace('.', '')
-            
-            # Handle comma as decimal separator (7,50 = 7.50)
-            price_text = price_text.replace(',', '.')
-            
-            # Extract just the numbers
-            price_match = re.search(r'(\d+\.?\d{0,2})', price_text)
+            price_text = price_text.replace('\xa0', ' ').strip()  # NBSP
+
+            # Keep only the first plausible numeric token.
+            token_match = re.search(r'[-+]?[0-9][0-9\.,\s]*', price_text)
+            if not token_match:
+                return None
+
+            token = token_match.group(0).strip().replace(' ', '')
+
+            # Heuristics:
+            # - If comma exists, assume Danish decimal separator and dot as thousands.
+            # - Else if dot exists:
+            #   - If it matches thousands grouping (1.234 or 12.345.678) => remove dots.
+            #   - Otherwise treat dot as decimal.
+            if ',' in token:
+                token = token.replace('.', '')
+                token = token.replace(',', '.')
+            elif '.' in token:
+                if re.fullmatch(r'\d{1,3}(?:\.\d{3})+(?:\.\d{3})*', token):
+                    token = token.replace('.', '')
+                # else: keep dot as decimal
+
+            price_match = re.search(r'(\d+(?:\.\d{1,2})?)', token)
             if price_match:
                 return float(price_match.group(1))
         except (ValueError, AttributeError) as e:

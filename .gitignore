@@ -1,0 +1,32 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+.venv/
+venv/
+ENV/
+
+# Pytest
+.pytest_cache/
+
+# Tooling
+.mypy_cache/
+.ruff_cache/
+.pyright/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+
+# Project artifacts
+logs/*.log
+
+# Local databases
+data/*.db
+
+# Test output artifacts (generated)
+test_results/*.json
+test_results/*.csv

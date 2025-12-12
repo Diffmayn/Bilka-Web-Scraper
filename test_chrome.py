@@ -2,6 +2,15 @@
 Simple Chrome test script to verify ChromeDriver functionality
 """
 
+import os
+import pytest
+
+
+# This is an environment/integration diagnostic. Under pytest we skip it unless
+# explicitly enabled.
+if os.getenv("RUN_INTEGRATION_TESTS", "").lower() not in {"1", "true", "yes"}:
+    pytest.skip("Skipping Chrome/WebDriver integration test (set RUN_INTEGRATION_TESTS=1 to run)", allow_module_level=True)
+
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
@@ -38,7 +47,7 @@ def test_chrome():
         driver.get("https://www.google.com")
         print(f"Page title: {driver.title}")
         driver.quit()
-        return True
+        assert driver.title
 
     except Exception as e:
         print(f"❌ Error with webdriver-manager: {e}")
@@ -51,11 +60,11 @@ def test_chrome():
             driver.get("https://www.google.com")
             print(f"Page title: {driver.title}")
             driver.quit()
-            return True
+            assert driver.title
 
         except Exception as e2:
             print(f"❌ Error without webdriver-manager: {e2}")
-            return False
+            raise
 
 if __name__ == "__main__":
     success = test_chrome()

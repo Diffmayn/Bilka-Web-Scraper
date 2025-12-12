@@ -5,7 +5,11 @@ Data storage and database operations
 import os
 import logging
 from typing import Dict, List, Optional
-from datetime import datetime
+from datetime import datetime, UTC
+
+from pathlib import Path
+
+import yaml
 from sqlalchemy import create_engine, func
 from sqlalchemy.orm import sessionmaker, Session
 from sqlalchemy.exc import SQLAlchemyError
@@ -15,6 +19,40 @@ from .models import Base, Product, PriceHistory, ScrapeLog, AnomalyDetection
 logger = logging.getLogger(__name__)
 
 
+def _resolve_database_url(database_url: Optional[str]) -> str:
+    """Resolve database URL from explicit arg, env var, or config file."""
+    if database_url:
+        return database_url
+
+    env_url = os.getenv("DATABASE_URL")
+    if env_url:
+        return env_url
+
+    # config/settings.yaml (preferred)
+    try:
+        with open("config/settings.yaml", "r", encoding="utf-8") as f:
+            cfg = yaml.safe_load(f) or {}
+        db_cfg = cfg.get("database", {})
+        filename = db_cfg.get("filename") or "./data/bilka_prices.db"
+
+        filename_str = str(filename)
+        if filename_str.startswith("sqlite:"):
+            return filename_str
+
+        path = Path(filename_str)
+        # SQLite URLs need forward slashes.
+        path_posix = path.as_posix()
+        # Keep relative paths relative to project root.
+        if not path.is_absolute():
+            path_posix = path_posix.lstrip("./")
+        return f"sqlite:///{path_posix}"
+    except FileNotFoundError:
+        return "sqlite:///data/bilka_prices.db"
+    except Exception as e:
+        logger.warning(f"Failed to read database config, using default: {e}")
+        return "sqlite:///data/bilka_prices.db"
+
+
 def reset_database(database_url: Optional[str] = None):
     """
     Reset the database by dropping all tables and recreating them
@@ -22,9 +60,8 @@ def reset_database(database_url: Optional[str] = None):
     Args:
         database_url: Database connection URL (defaults to SQLite in data/)
     """
-    if database_url is None:
-        os.makedirs("data", exist_ok=True)
-        database_url = "sqlite:///data/bilka_prices.db"
+    database_url = _resolve_database_url(database_url)
+    os.makedirs("data", exist_ok=True)
 
     engine = create_engine(database_url, echo=False)
     Base.metadata.drop_all(engine)
@@ -39,9 +76,8 @@ def initialize_database(database_url: Optional[str] = None):
     Args:
         database_url: Database connection URL (defaults to SQLite in data/)
     """
-    if database_url is None:
-        os.makedirs("data", exist_ok=True)
-        database_url = "sqlite:///data/bilka_prices.db"
+    database_url = _resolve_database_url(database_url)
+    os.makedirs("data", exist_ok=True)
 
     engine = create_engine(database_url, echo=False)
     Base.metadata.create_all(engine)
@@ -58,10 +94,7 @@ def create_data_storage(database_url: Optional[str] = None) -> 'DataStorage':
     Returns:
         DataStorage instance
     """
-    if database_url is None:
-        database_url = "sqlite:///data/bilka_prices.db"
-
-    return DataStorage(database_url)
+    return DataStorage(_resolve_database_url(database_url))
 
 
 class DataStorage:
@@ -88,27 +121,46 @@ class DataStorage:
         """
         session = self.get_session()
         try:
-            # Check if product already exists
-            existing = session.query(Product).filter_by(
-                name=product_data['name']
-            ).first()
+            name = (product_data.get('name') or '').strip()
+            if not name:
+                logger.error("Refusing to store product without a name")
+                return None
+
+            external_id = (product_data.get('external_id') or '').strip() or None
+            url = (product_data.get('url') or '').strip() or None
+
+            # Prefer stable identifiers for upsert.
+            existing = None
+            if external_id:
+                existing = session.query(Product).filter_by(external_id=external_id).first()
+            if existing is None and url:
+                existing = session.query(Product).filter_by(url=url).first()
+            if existing is None:
+                # Last resort (not stable): name.
+                existing = session.query(Product).filter_by(name=name).first()
 
             if existing:
                 # Update existing product
                 for key, value in product_data.items():
                     if hasattr(existing, key):
                         setattr(existing, key, value)
-                existing.updated_at = datetime.utcnow()
+                existing.updated_at = datetime.now(UTC)
                 product = existing
             else:
                 # Create new product
+                product_data = dict(product_data)
+                product_data['name'] = name
+                if external_id:
+                    product_data['external_id'] = external_id
+                if url:
+                    product_data['url'] = url
                 product = Product(**product_data)
                 session.add(product)
 
             session.commit()
             session.refresh(product)
 
-            # Store price history
+            # Store price history (avoid duplicates)
             self._store_price_history(session, product)
 
             logger.info(f"Stored product: {product.name}")
@@ -124,6 +176,22 @@ class DataStorage:
     def _store_price_history(self, session: Session, product: Product):
         """Store price history for a product"""
         try:
+            # Avoid inserting identical consecutive records.
+            last = (
+                session.query(PriceHistory)
+                .filter(PriceHistory.product_id == product.id)
+                .order_by(PriceHistory.recorded_at.desc())
+                .first()
+            )
+
+            if last is not None:
+                if (
+                    last.price == product.current_price
+                    and last.original_price == product.original_price
+                    and last.discount_percentage == product.discount_percentage
+                ):
+                    return
+
             price_entry = PriceHistory(
                 product_id=product.id,
                 price=product.current_price,

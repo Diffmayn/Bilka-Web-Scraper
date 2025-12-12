@@ -4,7 +4,8 @@ Data processing utilities for cleaning and normalizing product data
 
 import logging
 from typing import Dict, List, Optional
-from datetime import datetime
+from datetime import datetime, UTC
+import hashlib
 
 logger = logging.getLogger(__name__)
 
@@ -25,6 +26,11 @@ def clean_product_data(product: Dict) -> Dict:
     name = product.get('name') or ''
     if name:
         cleaned['name'] = str(name).strip()[:500]  # Truncate to max length
+
+    # Stable external id (prefer provided value, otherwise derive from URL)
+    external_id = product.get('external_id') or ''
+    if external_id:
+        cleaned['external_id'] = str(external_id).strip()[:255]
 
     # Clean brand
     brand = product.get('brand') or ''
@@ -55,6 +61,12 @@ def clean_product_data(product: Dict) -> Dict:
     if url:
         cleaned['url'] = str(url).strip()
 
+        # If no external_id was provided, derive a stable one from the URL.
+        # This avoids upserting by name (which is not stable) and reduces duplicates.
+        if 'external_id' not in cleaned:
+            url_hash = hashlib.sha1(cleaned['url'].encode('utf-8')).hexdigest()
+            cleaned['external_id'] = url_hash[:40]
+
     image_url = product.get('image_url') or ''
     if image_url:
         cleaned['image_url'] = str(image_url).strip()
@@ -70,7 +82,18 @@ def clean_product_data(product: Dict) -> Dict:
         cleaned['description'] = str(description).strip()
 
     # Add scraped timestamp
-    cleaned['scraped_at'] = product.get('scraped_at', datetime.utcnow())
+    scraped_at = product.get('scraped_at')
+    if scraped_at is None:
+        scraped_at = datetime.now(UTC)
+    else:
+        # Normalize naive datetimes to UTC to avoid Python 3.13 utcnow() deprecation
+        try:
+            if getattr(scraped_at, 'tzinfo', None) is None:
+                scraped_at = scraped_at.replace(tzinfo=UTC)
+        except Exception:
+            scraped_at = datetime.now(UTC)
+
+    cleaned['scraped_at'] = scraped_at
 
     return cleaned
 

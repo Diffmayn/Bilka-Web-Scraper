@@ -4,19 +4,19 @@ Test the full Bilka Price Monitor pipeline using mock scraper
 
 import sys
 import os
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), "src"))
+sys.path.insert(0, os.path.dirname(__file__))
 
-from scraper.mock_scraper import MockBilkaScraper
-from data.processor import process_products
-from data.storage import create_data_storage
-from analysis.discount_analyzer import analyze_product_discounts
-from analysis.price_validator import validate_product_prices
+from src.scraper.mock_scraper import MockBilkaScraper
+from src.data.processor import process_products
+from src.data.storage import create_data_storage
+from src.analysis.discount_analyzer import analyze_product_discounts
+from src.analysis.price_validator import validate_product_prices
 import pandas as pd
 import json
 from datetime import datetime
 
-def test_full_pipeline():
-    """Test the complete application pipeline."""
+def run_full_pipeline() -> dict:
+    """Run the complete application pipeline and return a summary dict."""
     print("🚀 Testing Bilka Price Monitor Full Pipeline")
     print("=" * 50)
 
@@ -40,13 +40,19 @@ def test_full_pipeline():
 
     # Step 4: Data analysis
     print("\n📈 Step 4: Discount Analysis")
-    df = pd.DataFrame([{
-        'external_id': p.external_id,
-        'name': p.name,
-        'regular_price': p.regular_price,
-        'sale_price': p.sale_price,
-        'discount_percentage': p.discount_percentage
-    } for p in processed_products])
+    # NOTE: process_products() returns a list of dicts, not objects.
+    # The analysis modules operate on current/original prices.
+    df = pd.DataFrame([
+        {
+            'name': p.get('name'),
+            'category': p.get('category'),
+            'current_price': p.get('current_price'),
+            'original_price': p.get('original_price'),
+            'discount_percentage': p.get('discount_percentage', 0) or 0,
+            'url': p.get('url'),
+        }
+        for p in processed_products
+    ])
 
     analysis = analyze_product_discounts(df)
     print(f"📊 Analysis Results:")
@@ -96,7 +102,8 @@ def test_full_pipeline():
             'invalid_products': validation_report.invalid_products,
             'validation_rate': validation_report.valid_products/validation_report.total_products*100
         },
-        'errors': validation_report.validation_errors[:5],  # Top 5 errors
+        'errors': validation_report.errors[:5],  # Top 5 errors
+        'warnings': validation_report.warnings[:5],
         'generated_at': datetime.now().isoformat()
     }
 
@@ -135,9 +142,18 @@ def test_full_pipeline():
         'files_generated': [analysis_file, validation_file, csv_file]
     }
 
+
+def test_full_pipeline():
+    """Test the complete application pipeline (mocked)."""
+    results = run_full_pipeline()
+    assert results['products_scraped'] > 0
+    assert results['products_processed'] > 0
+    assert results['products_stored'] >= 0
+    assert 0 <= results['validation_rate'] <= 100
+
 if __name__ == "__main__":
     try:
-        results = test_full_pipeline()
+        results = run_full_pipeline()
         print(f"\n📋 Test Summary: {results}")
     except Exception as e:
         print(f"❌ Test failed with error: {e}")

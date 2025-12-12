@@ -19,9 +19,7 @@ def test_database_setup():
     print("🔍 Testing database setup...")
 
     # Check if simple_poc.py exists
-    if not os.path.exists("simple_poc.py"):
-        print("❌ simple_poc.py not found")
-        return False
+    assert os.path.exists("simple_poc.py"), "simple_poc.py not found"
 
     # Import the POC module to test database setup
     try:
@@ -29,37 +27,27 @@ def test_database_setup():
         monitor = SimpleBilkaMonitor()
 
         # Check if database was created
-        if os.path.exists("data/bilka_poc.db"):
-            print("✅ Database created successfully")
+        assert os.path.exists("data/bilka_poc.db"), "Database file data/bilka_poc.db not created"
+        print("✅ Database created successfully")
 
-            # Test basic database operations
-            conn = sqlite3.connect("data/bilka_poc.db")
-            cursor = conn.cursor()
+        # Test basic database operations
+        conn = sqlite3.connect("data/bilka_poc.db")
+        cursor = conn.cursor()
 
-            # Check if tables exist
-            cursor.execute("SELECT name FROM sqlite_master WHERE type='table'")
-            tables = cursor.fetchall()
-            table_names = [table[0] for table in tables]
+        # Check if tables exist
+        cursor.execute("SELECT name FROM sqlite_master WHERE type='table'")
+        tables = cursor.fetchall()
+        table_names = [table[0] for table in tables]
 
-            if 'products' in table_names and 'scrape_log' in table_names:
-                print("✅ Database tables created correctly")
-                conn.close()
-                return True
-            else:
-                print("❌ Database tables missing")
-                conn.close()
-                return False
-
-        else:
-            print("❌ Database file not created")
-            return False
+        assert 'products' in table_names and 'scrape_log' in table_names, "Database tables missing"
+        print("✅ Database tables created correctly")
+        conn.close()
+        return
 
     except ImportError as e:
-        print(f"❌ Import error: {e}")
-        return False
+        raise
     except Exception as e:
-        print(f"❌ Database setup error: {e}")
-        return False
+        raise
 
 def test_dependencies():
     """Test if required dependencies are available"""
@@ -81,7 +69,7 @@ def test_dependencies():
             missing_modules.append(module)
             print(f"❌ {module} missing")
 
-    return len(missing_modules) == 0
+    assert len(missing_modules) == 0, f"Missing modules: {missing_modules}"
 
 def test_file_structure():
     """Test if all required files exist"""
@@ -102,7 +90,7 @@ def test_file_structure():
             missing_files.append(file_path)
             print(f"❌ {file_path} missing")
 
-    return len(missing_files) == 0
+    assert len(missing_files) == 0, f"Missing files: {missing_files}"
 
 def main():
     print("🧪 Bilka Price Monitor - POC Test Suite")

@@ -3,6 +3,15 @@ Quick test script to diagnose scraping issues
 Shows detailed logs to help identify problems
 """
 
+import os
+import pytest
+
+
+# This script performs real external scraping and browser automation.
+# Skip under pytest unless explicitly enabled.
+if os.getenv("RUN_INTEGRATION_TESTS", "").lower() not in {"1", "true", "yes"}:
+    pytest.skip("Skipping real scraping diagnostic (set RUN_INTEGRATION_TESTS=1 to run)", allow_module_level=True)
+
 import logging
 import sys
 import os

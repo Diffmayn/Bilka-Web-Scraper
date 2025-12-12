@@ -1,10 +1,8 @@
-"""
-SQLAlchemy database models for Bilka Price Monitor
-"""
+"""SQLAlchemy database models for Bilka Price Monitor."""
 
-from datetime import datetime
+from datetime import datetime, UTC
 from sqlalchemy import Column, Integer, String, Float, DateTime, Boolean, Text, ForeignKey
-from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import declarative_base
 from sqlalchemy.orm import relationship
 
 Base = declarative_base()
@@ -32,9 +30,9 @@ class Product(Base):
     description = Column(Text, nullable=True)
 
     # Metadata
-    scraped_at = Column(DateTime, default=datetime.utcnow, index=True)
-    created_at = Column(DateTime, default=datetime.utcnow)
-    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    scraped_at = Column(DateTime, default=lambda: datetime.now(UTC), index=True)
+    created_at = Column(DateTime, default=lambda: datetime.now(UTC))
+    updated_at = Column(DateTime, default=lambda: datetime.now(UTC), onupdate=lambda: datetime.now(UTC))
 
     # Relationships
     price_history = relationship("PriceHistory", back_populates="product", cascade="all, delete-orphan")
@@ -56,7 +54,7 @@ class PriceHistory(Base):
     discount_percentage = Column(Float, nullable=True)
 
     # Timestamps
-    recorded_at = Column(DateTime, default=datetime.utcnow, index=True)
+    recorded_at = Column(DateTime, default=lambda: datetime.now(UTC), index=True)
 
     # Relationship
     product = relationship("Product", back_populates="price_history")
@@ -75,7 +73,7 @@ class ScrapeLog(Base):
     products_stored = Column(Integer, default=0)
     status = Column(String(50), default='success')  # success, error, partial
     error_message = Column(Text, nullable=True)
-    started_at = Column(DateTime, default=datetime.utcnow)
+    started_at = Column(DateTime, default=lambda: datetime.now(UTC))
     completed_at = Column(DateTime, nullable=True)
     duration_seconds = Column(Float, nullable=True)
 
@@ -106,7 +104,7 @@ class AnomalyDetection(Base):
     false_positive = Column(Boolean, default=False)
 
     # Timestamps
-    detected_at = Column(DateTime, default=datetime.utcnow, index=True)
+    detected_at = Column(DateTime, default=lambda: datetime.now(UTC), index=True)
     reviewed_at = Column(DateTime, nullable=True)
 
     def __repr__(self):
