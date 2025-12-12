@@ -45,9 +45,10 @@ def test_chrome():
 
         print("✅ Chrome started successfully!")
         driver.get("https://www.google.com")
-        print(f"Page title: {driver.title}")
+        title = driver.title
+        print(f"Page title: {title}")
+        assert title
         driver.quit()
-        assert driver.title
 
     except Exception as e:
         print(f"❌ Error with webdriver-manager: {e}")
@@ -58,16 +59,18 @@ def test_chrome():
             driver = webdriver.Chrome(options=options)
             print("✅ Chrome started successfully!")
             driver.get("https://www.google.com")
-            print(f"Page title: {driver.title}")
+            title = driver.title
+            print(f"Page title: {title}")
+            assert title
             driver.quit()
-            assert driver.title
 
         except Exception as e2:
             print(f"❌ Error without webdriver-manager: {e2}")
             raise
 
 if __name__ == "__main__":
-    success = test_chrome()
+    success = True
+    test_chrome()
     if success:
         print("🎉 Chrome WebDriver test passed!")
         sys.exit(0)
